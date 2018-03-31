@@ -1,4 +1,7 @@
 package com.sessionmock.SessionMock.services;
 
-public class SessionService {
+import org.springframework.stereotype.Service;
+
+@Service
+public interface SessionService {
 }

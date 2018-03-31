@@ -1,4 +1,7 @@
 package com.sessionmock.SessionMock.services;
 
-public class EndpointDataService {
+import org.springframework.stereotype.Service;
+
+@Service
+public interface EndpointDataService {
 }
