@@ -1,6 +1,9 @@
 package com.sessionmock.SessionMock.services;
 
-import jdk.nashorn.internal.ir.ObjectNode;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sessionmock.SessionMock.model.Endpoint;
+import com.sessionmock.SessionMock.model.RequestPattern;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface RequestMappingService {
 
-    String findStringResponse(HttpServletRequest request);
+    RequestPattern findRequestPattern(HttpServletRequest request);
 
-    ObjectNode findObjectResponse(HttpServletRequest request);
+    Endpoint findEndpoint(RequestPattern requestPattern);
+
+
 }

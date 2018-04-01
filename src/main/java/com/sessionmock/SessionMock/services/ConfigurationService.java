@@ -3,5 +3,5 @@ package com.sessionmock.SessionMock.services;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface EndpointDataService {
+public interface ConfigurationService {
 }

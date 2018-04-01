@@ -1,4 +1,6 @@
 package com.sessionmock.SessionMock.services.impl;
 
-public class SessionServiceImpl {
+import com.sessionmock.SessionMock.services.SessionService;
+
+public class SessionServiceImpl implements SessionService{
 }
