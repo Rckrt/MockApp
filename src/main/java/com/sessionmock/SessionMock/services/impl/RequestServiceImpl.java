@@ -23,7 +23,6 @@ public class RequestServiceImpl implements RequestService {
     public Object execute(HttpServletRequest request) {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern);
-        validationService.validateRequestBody(request, requestPattern);
         return sessionService.findSessionData(requestPattern, request);
     }
 }

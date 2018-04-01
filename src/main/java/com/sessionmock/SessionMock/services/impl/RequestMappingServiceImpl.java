@@ -22,11 +22,6 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     }
 
     @Override
-    public SessionData findSessionData(RequestPattern requestPattern, HttpServletRequest request) {
-        return null;
-    }
-
-    @Override
     public String getKeyForUrl(String url) {
         return null;
     }
