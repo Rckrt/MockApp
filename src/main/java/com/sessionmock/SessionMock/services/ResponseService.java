@@ -1,6 +1,6 @@
 package com.sessionmock.SessionMock.services;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sessionmock.SessionMock.model.RequestPattern;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface ResponseService {
 
-    String findStringResponse(HttpServletRequest request);
-
-    ObjectNode findObjectResponse(HttpServletRequest request);
+    Object findResponse(HttpServletRequest request, RequestPattern requestPattern);
 
 }

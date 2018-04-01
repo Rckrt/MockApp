@@ -2,6 +2,7 @@ package com.sessionmock.SessionMock.controller;
 
 
 import com.sessionmock.SessionMock.services.RequestMappingService;
+import com.sessionmock.SessionMock.services.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,11 @@ import java.util.Map;
 @Slf4j
 public class SingleController {
 
-    private final RequestMappingService requestMappingService;
+    private final RequestService requestService;
 
     @Autowired
-    public SingleController(RequestMappingService requestMappingService) {
-        this.requestMappingService = requestMappingService;
+    public SingleController(RequestService requestService) {
+        this.requestService = requestService;
     }
 
     @RequestMapping("**")
@@ -31,6 +32,6 @@ public class SingleController {
         log.info("allRequestParams: {}", allRequestParams);
         log.info("allRequestHeaders: {}", allRequestHeaders);
         log.info("request: {}", request);
-        return ((Object) );
+        return requestService.execute(request);
     }
 }
