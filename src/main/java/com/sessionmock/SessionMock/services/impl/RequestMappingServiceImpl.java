@@ -1,7 +1,7 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.model.Endpoint;
 import com.sessionmock.SessionMock.model.RequestPattern;
+import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.services.RequestMappingService;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     }
 
     @Override
-    public Endpoint findEndpoint(RequestPattern requestPattern) {
+    public SessionData findSessionData(RequestPattern requestPattern, HttpServletRequest request) {
         return null;
     }
 

@@ -12,9 +12,4 @@ public class ValidationServiceImpl implements ValidationService {
     public void validateRequest(HttpServletRequest request, RequestPattern requestPattern) {
 
     }
-
-    @Override
-    public void validateRequestBody(HttpServletRequest request, RequestPattern requestPattern) {
-
-    }
 }

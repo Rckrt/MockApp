@@ -10,13 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestServiceImpl implements RequestService {
 
     private final ValidationService validationService;
-    private final ResponseService responseService;
     private final SessionService sessionService;
     private final RequestMappingService requestMappingService;
 
-    public RequestServiceImpl(ValidationService validationService, ResponseService responseService, SessionService sessionService, RequestMappingService requestMappingService) {
+    public RequestServiceImpl(ValidationService validationService, SessionService sessionService, RequestMappingService requestMappingService) {
         this.validationService = validationService;
-        this.responseService = responseService;
         this.sessionService = sessionService;
         this.requestMappingService = requestMappingService;
     }
@@ -26,6 +24,6 @@ public class RequestServiceImpl implements RequestService {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern);
         validationService.validateRequestBody(request, requestPattern);
-        return responseService.findResponse(request , requestPattern);
+        return sessionService.findSessionData(requestPattern, request);
     }
 }

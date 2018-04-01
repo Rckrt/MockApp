@@ -1,6 +1,6 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.model.Endpoint;
+import com.sessionmock.SessionMock.model.RequestPattern;
 import com.sessionmock.SessionMock.services.ConfigurationService;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
-    public void restoreToDefault(Endpoint endpoint) {
+    public void restoreToDefault(RequestPattern requestPattern) {
 
     }
 

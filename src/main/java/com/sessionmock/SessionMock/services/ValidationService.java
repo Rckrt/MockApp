@@ -10,6 +10,4 @@ public interface ValidationService {
 
     void validateRequest(HttpServletRequest request, RequestPattern requestPattern);
 
-    void validateRequestBody(HttpServletRequest request, RequestPattern requestPattern);
-
 }
