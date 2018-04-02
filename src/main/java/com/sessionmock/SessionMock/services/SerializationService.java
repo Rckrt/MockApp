@@ -1,10 +1,8 @@
 package com.sessionmock.SessionMock.services;
 
 import com.sessionmock.SessionMock.model.RequestPattern;
+import java.util.List;
 
 public interface SerializationService {
-
-    RequestPattern serializeAllRequestPatterns();
-
-    void serializeAllDefaultData();
+    List<List<RequestPattern>> getScenariosList();
 }

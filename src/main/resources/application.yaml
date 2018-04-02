@@ -1,0 +1,6 @@
+application:
+  static:
+    resources:
+      patterns: ${PATTERNS_PATH}
+      scenarios: ${SCENARIOS_PATH}
+      default_data: ${DEFAULT_DATA_PATH}

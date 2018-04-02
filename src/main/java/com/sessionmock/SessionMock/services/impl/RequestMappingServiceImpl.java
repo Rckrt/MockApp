@@ -1,8 +1,13 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.sessionmock.SessionMock.model.Pattern;
 import com.sessionmock.SessionMock.model.RequestPattern;
-import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.services.RequestMappingService;
+import com.sessionmock.SessionMock.services.SerializationService;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -14,7 +19,14 @@ import java.util.Map;
 @Service
 public class RequestMappingServiceImpl implements RequestMappingService {
 
-    private Map<RequestPattern, List<RequestPattern>> requestPatternGraph;
+    private Map<RequestPattern, List<RequestPattern>> requestPatternGraph = new HashMap<>();
+    private final SerializationService serializationService;
+
+    @Autowired
+    public RequestMappingServiceImpl(
+        SerializationService serializationService) {
+        this.serializationService = serializationService;
+    }
 
     @Override
     public RequestPattern findRequestPattern(HttpServletRequest request) {
@@ -28,5 +40,18 @@ public class RequestMappingServiceImpl implements RequestMappingService {
 
     @PostConstruct
     private void buildGraph() {
+        for (List<RequestPattern> scenario : serializationService.getScenariosList()) {
+            RequestPattern previousPattern = scenario.get(0);
+            addRequestPatternGraphVertex(previousPattern, null);
+            for (int i = 1; i < scenario.size(); i++) {
+                addRequestPatternGraphVertex(scenario.get(i), previousPattern);
+                previousPattern = scenario.get(i);
+            }
+        }
+    }
+
+    private void addRequestPatternGraphVertex(RequestPattern pattern, RequestPattern previous){
+        requestPatternGraph.computeIfAbsent(pattern, k -> new ArrayList<>());
+        requestPatternGraph.get(pattern).add(previous);
     }
 }
