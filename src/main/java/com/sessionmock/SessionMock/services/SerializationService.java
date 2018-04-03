@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface SerializationService {
     List<List<RequestPattern>> getScenariosList();
+
+    RequestPattern findPatternByNickname(String nickname);
 }

@@ -13,6 +13,7 @@ import java.util.Map;
 public class RequestPattern {
 
     private String urlPattern;
+    private String nickname;
     private String requestMethod;
     private Map<PatternType,List<Pattern>> allPattern =  new HashMap<>();
     private Schema schema;
