@@ -1,6 +1,7 @@
 package com.sessionmock.SessionMock.services;
 
 import com.sessionmock.SessionMock.model.RequestPattern;
+import java.io.IOException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface ValidationService {
 
-    void validateRequest(HttpServletRequest request, RequestPattern requestPattern);
+    void validateRequest(HttpServletRequest request, RequestPattern requestPattern)
+        throws IOException;
 
 }

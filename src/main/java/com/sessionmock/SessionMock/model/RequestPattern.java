@@ -2,12 +2,12 @@ package com.sessionmock.SessionMock.model;
 
 import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
-import org.everit.json.schema.Schema;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 
 @Data
 public class RequestPattern {
@@ -16,7 +16,7 @@ public class RequestPattern {
     private String nickname;
     private String requestMethod;
     private Map<PatternType,List<Pattern>> allPattern =  new HashMap<>();
-    private Schema schema;
+    private JSONObject schema;
 
     public void addPattern(PatternType patternType, Pattern pattern){
         if (allPattern.get(patternType) == null){

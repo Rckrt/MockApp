@@ -3,6 +3,7 @@ package com.sessionmock.SessionMock.controller;
 
 import com.sessionmock.SessionMock.services.RequestMappingService;
 import com.sessionmock.SessionMock.services.RequestService;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +28,11 @@ public class SingleController {
     Object getAllRequests(
         HttpServletRequest request,
         @RequestParam Map<String, String> allRequestParams,
-        @RequestHeader Map<String, String> allRequestHeaders)
-    {
+        @RequestHeader Map<String, String> allRequestHeaders,
+        @RequestBody Object body) throws IOException {
         log.info("allRequestParams: {}", allRequestParams);
         log.info("allRequestHeaders: {}", allRequestHeaders);
+        log.info("some body: {}", body);
         log.info("request: {}", request);
         return requestService.execute(request);
     }

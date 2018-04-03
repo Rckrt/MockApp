@@ -2,6 +2,7 @@ package com.sessionmock.SessionMock.services.impl;
 
 import com.sessionmock.SessionMock.model.RequestPattern;
 import com.sessionmock.SessionMock.services.*;
+import java.io.IOException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Object execute(HttpServletRequest request) {
+    public Object execute(HttpServletRequest request) throws IOException {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern);
         return sessionService.findSessionData(requestPattern, request);

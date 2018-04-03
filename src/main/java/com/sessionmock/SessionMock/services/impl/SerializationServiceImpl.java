@@ -1,13 +1,12 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sessionmock.SessionMock.model.RequestPattern;
 import com.sessionmock.SessionMock.services.SerializationService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -26,6 +25,12 @@ public class SerializationServiceImpl implements SerializationService {
   private List<RequestPattern> requestPatterns;
 
   private List<List<RequestPattern>> scenariosList;
+
+  private final ObjectMapper objectMapper;
+
+  public SerializationServiceImpl() {
+    objectMapper = new ObjectMapper();
+  }
 
   @PostConstruct
   private void serializeAllRequestPatterns() {
@@ -62,13 +67,16 @@ public class SerializationServiceImpl implements SerializationService {
           .lines(file.toPath())
           .map(this::findPatternByNickname)
           .collect(Collectors.toList());
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException ignored) {
+      throw new NullPointerException("No scenarios found");
     }
-    throw new NullPointerException("No scenarios found");
   }
 
   private RequestPattern serializeRequestPattern(File file){
-    return null;
+    try {
+      return objectMapper.readValue(file, RequestPattern.class);
+    } catch (IOException ignored) {
+    throw new NullPointerException("can't serialize " + file.getPath());
+    }
   }
 }
