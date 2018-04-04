@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface SessionService {
 
-    void isPreviosRequestExist(RequestPattern requestPattern, HttpServletRequest request);
-
     SessionData findSessionData(RequestPattern requestPattern, HttpServletRequest request);
+
+    SessionData saveRequest(RequestPattern requestPattern, HttpServletRequest request);
 }

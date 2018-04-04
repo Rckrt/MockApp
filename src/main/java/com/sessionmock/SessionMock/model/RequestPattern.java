@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.json.JSONObject;
 
 @Data
@@ -25,5 +27,29 @@ public class RequestPattern {
             allPattern.put(patternType, patterns);
         }
         else allPattern.get(patternType).add(pattern);
+    }
+
+    public List<Pattern> getPatternsByPatternType(PatternType patternType){
+        return allPattern.get(patternType);
+    }
+
+    public Map<PatternType,List<Pattern>> getAllSessionIdentifierPatternsMap() {
+        Map<PatternType,List<Pattern>> identifiers = new HashMap<>();
+        allPattern
+                .forEach((key, value) -> value
+                        .stream()
+                        .filter(Pattern::isIdentifier)
+                        .forEach(a -> identifiers.put(key, value)));
+        return identifiers;
+    }
+
+    public Map<PatternType,List<Pattern>> getAllMandatoryPatternsMap() {
+        Map<PatternType,List<Pattern>> identifiers = new HashMap<>();
+        allPattern
+                .forEach((key, value) -> value
+                        .stream()
+                        .filter(Pattern::isMandatory)
+                        .forEach(a -> identifiers.put(key, value)));
+        return identifiers;
     }
 }

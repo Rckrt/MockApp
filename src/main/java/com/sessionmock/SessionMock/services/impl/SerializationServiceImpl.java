@@ -47,7 +47,7 @@ public class SerializationServiceImpl implements SerializationService {
   }
 
   private File[] getAllFiles(String path){
-    return (new File(requestPatternsPath)).listFiles();
+    return (new File(path)).listFiles();
   }
 
 
@@ -58,7 +58,9 @@ public class SerializationServiceImpl implements SerializationService {
 
   @Override
   public RequestPattern findPatternByNickname(String nickname) {
-    return null;
+    return requestPatterns.stream()
+            .filter(a -> a.getNickname().equals(nickname))
+            .findFirst().get();
   }
 
   private List<RequestPattern> getPatternListFromFile(File file){

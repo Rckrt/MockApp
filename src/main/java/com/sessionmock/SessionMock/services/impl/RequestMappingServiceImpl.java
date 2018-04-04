@@ -1,12 +1,10 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.model.Pattern;
 import com.sessionmock.SessionMock.model.RequestPattern;
 import com.sessionmock.SessionMock.services.RequestMappingService;
 import com.sessionmock.SessionMock.services.SerializationService;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +29,11 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     @Override
     public RequestPattern findRequestPattern(HttpServletRequest request) {
         return null;
+    }
+
+    @Override
+    public List<RequestPattern> getInputRequestPatterns(RequestPattern requestPattern){
+        return requestPatternGraph.get(requestPattern);
     }
 
     @Override
