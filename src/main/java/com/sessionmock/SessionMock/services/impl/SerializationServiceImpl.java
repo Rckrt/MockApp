@@ -10,10 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class SerializationServiceImpl implements SerializationService {
 
   @Value("${application.static.resources.patterns}")
@@ -41,7 +44,7 @@ public class SerializationServiceImpl implements SerializationService {
   }
 
   private void serializeAllScenarios() {
-    this.scenariosList = Arrays.stream(getAllFiles(requestPatternsPath))
+    this.scenariosList = Arrays.stream(getAllFiles(scenariosPath))
         .map(this::getPatternListFromFile)
         .collect(Collectors.toList());
   }
@@ -78,6 +81,7 @@ public class SerializationServiceImpl implements SerializationService {
     try {
       return objectMapper.readValue(file, RequestPattern.class);
     } catch (IOException ignored) {
+      log.info("pizda {}", ignored);
     throw new NullPointerException("can't serialize " + file.getPath());
     }
   }

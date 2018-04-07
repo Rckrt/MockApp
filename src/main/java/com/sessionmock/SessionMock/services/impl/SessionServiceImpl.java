@@ -27,7 +27,7 @@ public class SessionServiceImpl implements SessionService{
 
     private boolean isPreviousRequestExist(RequestPattern requestPattern, HttpServletRequest request) {
         return true;
-                //requestMappingService.getInputRequestPatterns(requestPattern);
+        //requestMappingService.getInputRequestPatterns(requestPattern);
     }
 
     private boolean isInitialRequest(RequestPattern requestPattern){

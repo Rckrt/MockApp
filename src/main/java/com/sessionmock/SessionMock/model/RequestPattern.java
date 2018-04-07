@@ -17,7 +17,7 @@ public class RequestPattern {
     private String urlPattern;
     private String nickname;
     private String requestMethod;
-    private Map<PatternType,List<Pattern>> allPattern =  new HashMap<>();
+    private Map<PatternType,List<Pattern>> allPattern = new HashMap<>();
     private JSONObject schema;
 
     public void addPattern(PatternType patternType, Pattern pattern){

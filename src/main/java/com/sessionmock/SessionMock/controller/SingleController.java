@@ -27,9 +27,9 @@ public class SingleController {
     @RequestMapping("**")
     Object getAllRequests(
         HttpServletRequest request,
-        @RequestParam Map<String, String> allRequestParams,
-        @RequestHeader Map<String, String> allRequestHeaders,
-        @RequestBody Object body) throws IOException {
+        @RequestParam(required = false) Map<String, String> allRequestParams,
+        @RequestHeader(required = false) Map<String, String> allRequestHeaders,
+        @RequestBody(required = false) Object body) throws IOException {
         log.info("allRequestParams: {}", allRequestParams);
         log.info("allRequestHeaders: {}", allRequestHeaders);
         log.info("some body: {}", body);

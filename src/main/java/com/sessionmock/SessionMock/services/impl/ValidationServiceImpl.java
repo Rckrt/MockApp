@@ -32,4 +32,8 @@ public class ValidationServiceImpl implements ValidationService {
         throws IOException {
 
     }
+
+    private void isBodyExist(){
+
+    }
 }
