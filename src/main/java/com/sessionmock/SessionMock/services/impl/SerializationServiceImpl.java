@@ -81,7 +81,6 @@ public class SerializationServiceImpl implements SerializationService {
     try {
       return objectMapper.readValue(file, RequestPattern.class);
     } catch (IOException ignored) {
-      log.info("pizda {}", ignored);
     throw new NullPointerException("can't serialize " + file.getPath());
     }
   }

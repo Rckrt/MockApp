@@ -1,11 +1,16 @@
 package com.sessionmock.SessionMock.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sessionmock.SessionMock.model.constants.Constants.PATH_PARAM_IDENTIFIER;
+
+@NoArgsConstructor
 public class UrlResolver {
+    public static final UrlResolver ROOT = new UrlResolver();
     @Getter
     private String path;
     @Getter
@@ -13,29 +18,28 @@ public class UrlResolver {
     @Getter
     private List<UrlResolver> childes;
 
-    public UrlResolver(String key) {
+    private UrlResolver(String key) {
         this.path = key;
         this.childes = new ArrayList<>();
     }
 
-    public UrlResolver addUrl(String url){
-        UrlResolver current = this;
+    public void addUrl(String url){
+        UrlResolver current = ROOT;
         for(String key : url.split("/")) {
             String fullPath = "/" + current.getFullPath() + key;
             current = current.addChild(key);
             current.fullPath = fullPath;
         }
-        return current;
     }
 
-    public boolean isUrlExist(String url){
-        return false;
+    //TODO: custom Exception
+    public String findUrl(String url){
+        UrlResolver current = ROOT;
+        for(String key : url.split("/")) {
+            current = findChildByKey(key);
+        }
+        return current.getFullPath();
     }
-
-    public RequestPattern findPatternByUrl(){
-        return null;
-    }
-
 
     private UrlResolver addChild(String key){
         UrlResolver child = findChildByKey(key);
@@ -48,8 +52,11 @@ public class UrlResolver {
 
     private UrlResolver findChildByKey(String key) {
         return childes.stream()
-                .filter(ell -> ell.getPath().equals(key))
+                .filter(ell -> ell.checkEquality(key))
                 .findFirst().orElse(null);
     }
 
+    private boolean checkEquality(String key){
+       return this.getPath().equals(key) || this.getPath().equals(PATH_PARAM_IDENTIFIER);
+    }
 }

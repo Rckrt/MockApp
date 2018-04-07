@@ -13,6 +13,4 @@ public interface RequestMappingService {
 
     List<RequestPattern> getInputRequestPatterns(RequestPattern requestPattern);
 
-    String getKeyForUrl(String url);
-
 }

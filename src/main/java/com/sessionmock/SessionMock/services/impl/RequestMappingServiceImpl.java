@@ -1,6 +1,7 @@
 package com.sessionmock.SessionMock.services.impl;
 
 import com.sessionmock.SessionMock.model.RequestPattern;
+import com.sessionmock.SessionMock.model.UrlResolver;
 import com.sessionmock.SessionMock.services.RequestMappingService;
 import com.sessionmock.SessionMock.services.SerializationService;
 import java.util.ArrayList;
@@ -13,11 +14,14 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestMappingServiceImpl implements RequestMappingService {
 
     private Map<RequestPattern, List<RequestPattern>> requestPatternGraph = new HashMap<>();
+    private Map<String, List<RequestPattern>> urlMapping = new HashMap<>();
+    private final UrlResolver urlResolver = UrlResolver.ROOT;
     private final SerializationService serializationService;
 
     @Autowired
@@ -27,9 +31,14 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     }
 
     @Override
+    //TODO: throw custom exception
     public RequestPattern findRequestPattern(HttpServletRequest request) {
-
-        return null;
+        return urlMapping
+            .get(urlResolver.findUrl(request.getRequestURI()))
+            .stream()
+            .filter(pattern -> pattern.getRequestMethod().equals(request.getMethod()))
+            .findFirst()
+            .orElseThrow(NullPointerException::new);
     }
 
     @Override
@@ -37,13 +46,9 @@ public class RequestMappingServiceImpl implements RequestMappingService {
         return requestPatternGraph.get(requestPattern);
     }
 
-    @Override
-    public String getKeyForUrl(String url) {
-        return null;
-    }
 
     @PostConstruct
-    private void buildGraph() {
+    private void init() {
         for (List<RequestPattern> scenario : serializationService.getScenariosList()) {
             RequestPattern previousPattern = scenario.get(0);
             addRequestPatternGraphVertex(previousPattern, null);
@@ -52,6 +57,17 @@ public class RequestMappingServiceImpl implements RequestMappingService {
                 previousPattern = scenario.get(i);
             }
         }
+        buildUrlMapping();
+    }
+
+
+    private void buildUrlMapping() {
+        requestPatternGraph.keySet().forEach(this::addKeyMappingEntry);
+    }
+
+    private void addKeyMappingEntry(RequestPattern requestPattern){
+        urlMapping.computeIfAbsent(requestPattern.getUrlPattern(), k -> new ArrayList<>());
+        urlMapping.get(requestPattern.getUrlPattern()).add(requestPattern);
     }
 
     private void addRequestPatternGraphVertex(RequestPattern pattern, RequestPattern previous){
