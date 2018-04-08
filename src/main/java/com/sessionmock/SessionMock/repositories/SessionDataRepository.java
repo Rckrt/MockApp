@@ -1,6 +1,6 @@
 package com.sessionmock.SessionMock.repositories;
 
-import com.sessionmock.SessionMock.model.RequestPattern;
+import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

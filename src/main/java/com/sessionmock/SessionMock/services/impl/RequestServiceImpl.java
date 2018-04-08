@@ -1,6 +1,6 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.model.RequestPattern;
+import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.*;
 import java.io.IOException;
 import org.springframework.stereotype.Service;

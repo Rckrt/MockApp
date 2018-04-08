@@ -1,9 +1,11 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.model.RequestPattern;
-import com.sessionmock.SessionMock.model.enums.PatternType;
+import com.sessionmock.SessionMock.model.SessionData;
+import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.ValidationService;
 import java.io.IOException;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
@@ -30,6 +32,17 @@ public class ValidationServiceImpl implements ValidationService {
 
     private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern)
         throws IOException {
+    }
 
+    //TODO: implement logic
+    @Override
+    public boolean isPreviousExist(HttpServletRequest request, List<SessionData> previousSessions) {
+        boolean isPreviousExist = false;
+        for(SessionData session: previousSessions) isPreviousExist = validateRequestPatternByValues(request, session);
+        return isPreviousExist;
+    }
+
+    private boolean validateRequestPatternByValues(HttpServletRequest request, SessionData previousRequestPattern) {
+        return true;
     }
 }
