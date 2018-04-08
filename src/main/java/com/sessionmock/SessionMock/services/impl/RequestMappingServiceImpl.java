@@ -14,13 +14,12 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class RequestMappingServiceImpl implements RequestMappingService {
 
-    private Map<RequestPattern, List<RequestPattern>> requestPatternGraph = new HashMap<>();
-    private Map<String, List<RequestPattern>> urlMapping = new HashMap<>();
+    private final Map<RequestPattern, List<RequestPattern>> requestPatternGraph = new HashMap<>();
+    private final Map<String, List<RequestPattern>> urlMapping = new HashMap<>();
     private final UrlResolver urlResolver = UrlResolver.ROOT;
     private final SerializationService serializationService;
 
@@ -36,7 +35,8 @@ public class RequestMappingServiceImpl implements RequestMappingService {
         return urlMapping
             .get(urlResolver.findUrl(request.getRequestURI()))
             .stream()
-            .filter(pattern -> pattern.getRequestMethod().equals(request.getMethod()))
+            .filter(pattern -> pattern.getRequestMethod().toString().equals(request.getMethod()))
+            //TODO: get pattern by cookie/header/parameters
             .findFirst()
             .orElseThrow(NullPointerException::new);
     }

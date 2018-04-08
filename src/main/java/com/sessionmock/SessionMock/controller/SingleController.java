@@ -1,7 +1,6 @@
 package com.sessionmock.SessionMock.controller;
 
 
-import com.sessionmock.SessionMock.services.RequestMappingService;
 import com.sessionmock.SessionMock.services.RequestService;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,5 +1,6 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.sessionmock.SessionMock.model.Pattern;
 import com.sessionmock.SessionMock.model.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.model.enums.PatternType;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SessionServiceImpl implements SessionService{
@@ -39,6 +41,7 @@ public class SessionServiceImpl implements SessionService{
         requestPattern.getAllSessionIdentifierPatternsMap().values();
         sessionDataRepository
                 .findAllByRequestPatternIn(requestMappingService.getInputRequestPatterns(requestPattern));
+
         return null;
     }
 
@@ -50,5 +53,4 @@ public class SessionServiceImpl implements SessionService{
     private List<String> returnValuesByPatternType(PatternType patternType){
         return null;
     }
-
 }

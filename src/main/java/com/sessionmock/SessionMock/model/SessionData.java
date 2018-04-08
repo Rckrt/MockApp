@@ -4,13 +4,11 @@ import com.mongodb.BasicDBObject;
 import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
 import org.bson.types.ObjectId;
-import org.everit.json.schema.Schema;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Document(collection = "sessiondata")

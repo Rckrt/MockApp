@@ -7,5 +7,4 @@ public class Pattern {
     private String name;
     private String dataType;
     private boolean isIdentifier;
-    private boolean isMandatory;
 }

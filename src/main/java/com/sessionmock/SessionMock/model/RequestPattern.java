@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import com.sessionmock.SessionMock.model.enums.RequestType;
 
 import org.json.JSONObject;
 
@@ -16,7 +16,7 @@ public class RequestPattern {
 
     private String urlPattern;
     private String nickname;
-    private String requestMethod;
+    private RequestType requestMethod;
     private Map<PatternType,List<Pattern>> allPattern = new HashMap<>();
     private JSONObject schema;
 
@@ -39,16 +39,6 @@ public class RequestPattern {
                 .forEach((key, value) -> value
                         .stream()
                         .filter(Pattern::isIdentifier)
-                        .forEach(a -> identifiers.put(key, value)));
-        return identifiers;
-    }
-
-    public Map<PatternType,List<Pattern>> getAllMandatoryPatternsMap() {
-        Map<PatternType,List<Pattern>> identifiers = new HashMap<>();
-        allPattern
-                .forEach((key, value) -> value
-                        .stream()
-                        .filter(Pattern::isMandatory)
                         .forEach(a -> identifiers.put(key, value)));
         return identifiers;
     }
