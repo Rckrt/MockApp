@@ -1,5 +1,5 @@
 {"urlPattern" : "",
 "nickname" : "test",
 "requestMethod": "GET",
-"allPattern": {},
+"allPatterns": [],
 "schema": {}}

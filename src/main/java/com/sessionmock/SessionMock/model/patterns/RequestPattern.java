@@ -1,5 +1,6 @@
 package com.sessionmock.SessionMock.model.patterns;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
 
