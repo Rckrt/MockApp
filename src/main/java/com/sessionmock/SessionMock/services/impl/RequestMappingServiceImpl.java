@@ -66,12 +66,10 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     }
 
     private void addKeyMappingEntry(RequestPattern requestPattern){
-        urlMapping.computeIfAbsent(requestPattern.getUrlPattern(), k -> new ArrayList<>());
-        urlMapping.get(requestPattern.getUrlPattern()).add(requestPattern);
+        urlMapping.computeIfAbsent(requestPattern.getUrlPattern(), k -> new ArrayList<>()).add(requestPattern);
     }
 
     private void addRequestPatternGraphVertex(RequestPattern pattern, RequestPattern previous){
-        requestPatternGraph.computeIfAbsent(pattern, k -> new ArrayList<>());
-        requestPatternGraph.get(pattern).add(previous);
+        requestPatternGraph.computeIfAbsent(pattern, k -> new ArrayList<>()).add(previous);
     }
 }

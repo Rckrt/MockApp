@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,17 +33,5 @@ public class ValidationServiceImpl implements ValidationService {
 
     private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern)
         throws IOException {
-    }
-
-    //TODO: implement logic
-    @Override
-    public boolean isPreviousExist(HttpServletRequest request, List<SessionData> previousSessions) {
-        boolean isPreviousExist = false;
-        for(SessionData session: previousSessions) isPreviousExist = validateRequestPatternByValues(request, session);
-        return isPreviousExist;
-    }
-
-    private boolean validateRequestPatternByValues(HttpServletRequest request, SessionData previousRequestPattern) {
-        return true;
     }
 }

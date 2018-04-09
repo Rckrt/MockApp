@@ -1,9 +1,7 @@
 package com.sessionmock.SessionMock.model.patterns;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

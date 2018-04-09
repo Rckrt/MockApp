@@ -24,6 +24,6 @@ public class RequestServiceImpl implements RequestService {
     public Object execute(HttpServletRequest request) throws IOException {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern);
-        return sessionService.findSessionData(requestPattern, request);
+        return sessionService.findResponse(requestPattern, request);
     }
 }

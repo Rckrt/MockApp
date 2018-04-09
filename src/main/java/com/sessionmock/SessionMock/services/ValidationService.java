@@ -14,7 +14,4 @@ public interface ValidationService {
 
     void validateRequest(HttpServletRequest request, RequestPattern requestPattern)
         throws IOException;
-
-    //TODO: implement logic
-    boolean isPreviousExist(HttpServletRequest request, List<SessionData> previousRequestPattern);
 }
