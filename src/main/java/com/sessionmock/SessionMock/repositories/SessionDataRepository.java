@@ -10,8 +10,6 @@ import java.util.List;
 @Repository
 public interface SessionDataRepository extends CrudRepository<SessionData, String> {
 
-    List<SessionData> findAllByRequestPatternIn(List<RequestPattern> requestPattern);
-
     List<SessionData> findAllByUrlPattern(String urlPattern);
 
 
