@@ -1,8 +1,14 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.sessionmock.SessionMock.model.Response;
+import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.*;
 import java.io.IOException;
+
+import com.sun.org.apache.regexp.internal.RE;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +30,6 @@ public class RequestServiceImpl implements RequestService {
     public Object execute(HttpServletRequest request) throws IOException {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern);
-        return sessionService.findResponse(requestPattern, request);
+        return sessionService.findResponse(requestPattern, request).getResponseEntity();
     }
 }

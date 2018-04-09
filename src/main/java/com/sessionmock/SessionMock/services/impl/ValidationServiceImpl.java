@@ -31,7 +31,9 @@ public class ValidationServiceImpl implements ValidationService {
         schema.validate(IOUtils.toString(request.getReader()));
     }
 
+    //TODO: implement logic
     private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern)
         throws IOException {
+
     }
 }

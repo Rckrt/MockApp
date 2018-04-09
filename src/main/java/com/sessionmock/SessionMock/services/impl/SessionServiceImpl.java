@@ -1,6 +1,5 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.model.Response;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
@@ -51,11 +50,12 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
     //TODO: throw custom exception
-    public Response findResponse(RequestPattern requestPattern, HttpServletRequest request) throws IOException {
+    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request) throws IOException {
         Map<Pattern,String> currentIdentifierMap = buildIdentifierMap(requestPattern.getIdentifierPatterns(), request);
         if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap)) throw new NullPointerException();
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
-        return saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, request).getResponse();
+        saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, request);
+        return saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, request);
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {
