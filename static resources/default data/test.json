@@ -1,0 +1,3 @@
+{"urlPattern" : "/test",
+"response" : {"status" : "OK"},
+"data": "first string"}

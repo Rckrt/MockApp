@@ -33,6 +33,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     //TODO: throw custom exception
     public RequestPattern findRequestPattern(HttpServletRequest request) {
         return urlMapping
+                //TODO: delete shity hardcode
             .get(urlResolver.findUrl(request.getRequestURI()))
             .stream()
             .filter(pattern -> pattern.getRequestMethod().toString().equals(request.getMethod()))
@@ -53,6 +54,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
             RequestPattern previousPattern = scenario.get(0);
             addRequestPatternGraphVertex(previousPattern, null);
             for (int i = 1; i < scenario.size(); i++) {
+                urlResolver.addUrl(previousPattern.getUrlPattern());
                 addRequestPatternGraphVertex(scenario.get(i), previousPattern);
                 previousPattern = scenario.get(i);
             }

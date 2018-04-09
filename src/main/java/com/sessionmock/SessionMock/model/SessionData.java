@@ -25,7 +25,7 @@ public class SessionData{
     public SessionData(String urlPattern, Map<Pattern, String> sessionAttributeValues) {}
 
     //TODO: change logic if headers are added
-    public ResponseEntity<String> getResponseEntity(){
-        return new ResponseEntity<>(response.getBody(), response.getStatus());
+    public ResponseEntity getResponseEntity(){
+        return new ResponseEntity<>(data, response.getStatus());
     }
 }

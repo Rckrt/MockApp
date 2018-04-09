@@ -1,0 +1,5 @@
+{"urlPattern" : "/test",
+"nickname" : "testSecond",
+"requestMethod": "POST",
+"allPatterns": [],
+"schema": {}}

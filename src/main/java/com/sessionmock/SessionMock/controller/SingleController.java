@@ -33,6 +33,6 @@ public class SingleController {
         log.info("allRequestHeaders: {}", allRequestHeaders);
         log.info("some body: {}", body);
         log.info("request: {}", request);
-        return requestService.execute(request);
+        return requestService.execute(request, body);
     }
 }

@@ -8,5 +8,5 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface RequestService {
 
-    Object execute(HttpServletRequest request) throws IOException;
+    Object execute(HttpServletRequest request, Object body) throws IOException;
 }

@@ -8,7 +8,6 @@ import java.util.List;
 
 import static com.sessionmock.SessionMock.model.constants.Constants.PATH_PARAM_IDENTIFIER;
 
-@NoArgsConstructor
 public class UrlResolver {
     public static final UrlResolver ROOT = new UrlResolver();
     @Getter
@@ -18,6 +17,12 @@ public class UrlResolver {
     @Getter
     private List<UrlResolver> childes;
 
+    private UrlResolver(){
+        this.childes = new ArrayList<>();
+        this.fullPath = "";
+        this.path = "";
+    }
+
     private UrlResolver(String key) {
         this.path = key;
         this.childes = new ArrayList<>();
@@ -26,6 +31,7 @@ public class UrlResolver {
     public void addUrl(String url){
         UrlResolver current = ROOT;
         for(String key : url.split("/")) {
+            if ("".equals(key)) continue;
             String fullPath = "/" + current.getFullPath() + key;
             current = current.addChild(key);
             current.fullPath = fullPath;
@@ -36,7 +42,8 @@ public class UrlResolver {
     public String findUrl(String url){
         UrlResolver current = ROOT;
         for(String key : url.split("/")) {
-            current = findChildByKey(key);
+            if ("".equals(key)) continue;
+            current = findChildByKey(key, current);
         }
         return current.getFullPath();
     }
@@ -50,6 +57,12 @@ public class UrlResolver {
         return child;
     }
 
+    private UrlResolver findChildByKey(String key, UrlResolver current) {
+        return current.getChildes().stream()
+                .filter(ell -> ell.checkEquality(key))
+                .findFirst().orElse(null);
+    }
+
     private UrlResolver findChildByKey(String key) {
         return childes.stream()
                 .filter(ell -> ell.checkEquality(key))
@@ -57,6 +70,6 @@ public class UrlResolver {
     }
 
     private boolean checkEquality(String key){
-       return this.getPath().equals(key) || this.getPath().equals(PATH_PARAM_IDENTIFIER);
+       return key.equals(path) || PATH_PARAM_IDENTIFIER.equals(path);
     }
 }

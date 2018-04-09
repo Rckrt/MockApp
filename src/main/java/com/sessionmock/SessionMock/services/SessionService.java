@@ -10,5 +10,5 @@ import java.io.IOException;
 @Service
 public interface SessionService {
 
-    SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request) throws IOException;
+    SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, Object body) throws IOException;
 }

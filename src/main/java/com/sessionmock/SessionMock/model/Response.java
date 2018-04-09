@@ -7,5 +7,4 @@ import org.springframework.http.HttpStatus;
 @Data
 public class Response {
     private HttpStatus status;
-    private String body;
 }

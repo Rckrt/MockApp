@@ -50,7 +50,7 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
     //TODO: throw custom exception
-    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request) throws IOException {
+    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, Object body) throws IOException {
         Map<Pattern,String> currentIdentifierMap = buildIdentifierMap(requestPattern.getIdentifierPatterns(), request);
         if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap)) throw new NullPointerException();
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
@@ -59,6 +59,7 @@ public class SessionServiceImpl implements SessionService{
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {
+        if (currentIdentifierMap != null)
         sessionAttributes.computeIfAbsent(requestPattern, k -> new ArrayList<>()).add(currentIdentifierMap);
     }
 
@@ -74,6 +75,7 @@ public class SessionServiceImpl implements SessionService{
 
     //TODO: change to update logic and save body
     private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, HttpServletRequest request){
+
         return sessionDataRepository.save(new SessionData(url, currentIdentifierMap));
     }
 

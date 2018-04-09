@@ -47,6 +47,7 @@ public class SerializationServiceImpl implements SerializationService {
     this.scenariosList = Arrays.stream(getAllFiles(scenariosPath))
         .map(this::getPatternListFromFile)
         .collect(Collectors.toList());
+    this.scenariosList.forEach(list -> list.get(0).setInitial(true));
   }
 
   private File[] getAllFiles(String path){
