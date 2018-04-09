@@ -5,6 +5,7 @@ import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.repositories.SessionDataRepository;
 import com.sessionmock.SessionMock.services.RequestMappingService;
+import com.sessionmock.SessionMock.services.SerializationService;
 import com.sessionmock.SessionMock.services.SessionService;
 import com.sessionmock.SessionMock.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,14 @@ public class SessionServiceImpl implements SessionService{
 
     private final RequestMappingService requestMappingService;
     private final SessionDataRepository sessionDataRepository;
-    private final ValidationService validationService;
+    private final SerializationService serializationService;
     private Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes;
 
     @Autowired
-    public SessionServiceImpl(RequestMappingService requestMappingService, SessionDataRepository sessionDataRepository,
-                              ValidationService validationService) {
+    public SessionServiceImpl(RequestMappingService requestMappingService, SessionDataRepository sessionDataRepository, SerializationService serializationService) {
         this.requestMappingService = requestMappingService;
         this.sessionDataRepository = sessionDataRepository;
-        this.validationService = validationService;
+        this.serializationService = serializationService;
     }
 
 
@@ -78,5 +78,12 @@ public class SessionServiceImpl implements SessionService{
     }
 
     @PostConstruct
-    private void init(){}
+    //TODO check state and save it or invalidate
+    private void init(){
+        addDefaultData();
+    }
+
+    private void addDefaultData() {
+       sessionDataRepository.saveAll(serializationService.getDefaultSessionData());
+    }
 }
