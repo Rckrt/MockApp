@@ -1,6 +1,7 @@
 package com.sessionmock.SessionMock.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.SerializationService;
 import java.io.File;
@@ -25,9 +26,14 @@ public class SerializationServiceImpl implements SerializationService {
   @Value("${application.static.resources.scenarios}")
   private String scenariosPath;
 
+  @Value("${application.static.resources.default_data}")
+  private String defaultDataPath;
+
   private List<RequestPattern> requestPatterns;
 
   private List<List<RequestPattern>> scenariosList;
+
+  private List<SessionData> defaultData;
 
   private final ObjectMapper objectMapper;
 
@@ -36,11 +42,16 @@ public class SerializationServiceImpl implements SerializationService {
   }
 
   @PostConstruct
-  private void serializeAllRequestPatterns() {
-    this.requestPatterns = Arrays.stream(getAllFiles(requestPatternsPath))
-        .map(this::serializeRequestPattern)
-        .collect(Collectors.toList());
+  private void init() {
+    serializeAllRequestPatterns();
     serializeAllScenarios();
+    serializeAllDefaultData();
+  }
+
+  private void serializeAllDefaultData() {
+    this.defaultData = Arrays.stream(getAllFiles(defaultDataPath))
+            .map(e -> serializeClass(e, SessionData.class))
+            .collect(Collectors.toList());
   }
 
   private void serializeAllScenarios() {
@@ -48,6 +59,12 @@ public class SerializationServiceImpl implements SerializationService {
         .map(this::getPatternListFromFile)
         .collect(Collectors.toList());
     this.scenariosList.forEach(list -> list.get(0).setInitial(true));
+  }
+
+  private void serializeAllRequestPatterns(){
+    this.requestPatterns = Arrays.stream(getAllFiles(requestPatternsPath))
+            .map(e -> serializeClass(e, RequestPattern.class))
+            .collect(Collectors.toList());
   }
 
   private File[] getAllFiles(String path){
@@ -67,6 +84,11 @@ public class SerializationServiceImpl implements SerializationService {
             .findFirst().get();
   }
 
+  @Override
+  public List<SessionData> getDefaultSessionData() {
+    return defaultData;
+  }
+
   private List<RequestPattern> getPatternListFromFile(File file){
     try {
       return Files
@@ -78,9 +100,9 @@ public class SerializationServiceImpl implements SerializationService {
     }
   }
 
-  private RequestPattern serializeRequestPattern(File file){
+  private <T> T serializeClass(File file, Class<T> cls){
     try {
-      return objectMapper.readValue(file, RequestPattern.class);
+      return objectMapper.readValue(file, cls);
     } catch (IOException ignored) {
       log.info("serialization error {}" ,ignored);
     throw new NullPointerException("can't serialize " + file.getPath());
