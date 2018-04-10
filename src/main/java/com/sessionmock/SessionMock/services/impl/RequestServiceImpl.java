@@ -22,7 +22,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Object execute(HttpServletRequest request, Object body) throws IOException {
+    public Object execute(HttpServletRequest request, String body) throws IOException {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern, body);
         return sessionService.findResponse(requestPattern, request, body).getResponseEntity();

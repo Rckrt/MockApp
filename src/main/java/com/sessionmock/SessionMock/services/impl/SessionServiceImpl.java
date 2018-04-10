@@ -1,5 +1,6 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.mongodb.BasicDBObject;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
@@ -27,6 +28,7 @@ public class SessionServiceImpl implements SessionService{
     private final SerializationService serializationService;
     private Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes;
 
+
     @Autowired
     public SessionServiceImpl(RequestMappingService requestMappingService, SessionDataRepository sessionDataRepository, SerializationService serializationService) {
         this.requestMappingService = requestMappingService;
@@ -50,12 +52,15 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
     //TODO: throw custom exception
-    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, Object body) throws IOException {
+    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, String body) throws IOException {
         Map<Pattern,String> currentIdentifierMap = buildIdentifierMap(requestPattern.getIdentifierPatterns(), request);
         if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap)) throw new NullPointerException();
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
-        saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, request);
-        return saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, request);
+        return saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, body, isDataMustBeUpdated());
+    }
+
+    private boolean isDataMustBeUpdated() {
+        return false;
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {
@@ -74,9 +79,27 @@ public class SessionServiceImpl implements SessionService{
         }
 
     //TODO: change to update logic and save body
-    private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, HttpServletRequest request){
+    private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, String body , boolean isUpdate){
+        SessionData dataUnderUrl =  sessionDataRepository.findByUrlPatternAndSessionAttributeValues(url, currentIdentifierMap);
+        if (dataUnderUrl == null) {
+            //TODO custom exceptions
+            try {
+                dataUnderUrl = getDefaultRequest(url).clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (isUpdate) dataUnderUrl.setData(BasicDBObject.parse(body));
+        dataUnderUrl.setSessionAttributeValues(currentIdentifierMap);
+        return sessionDataRepository.save(dataUnderUrl);
+    }
 
-        return sessionDataRepository.save(new SessionData(url, currentIdentifierMap));
+    //TODO: custom exception
+    private SessionData getDefaultRequest(String url) {
+        return serializationService.getDefaultSessionData().stream()
+                .filter(sessionData -> sessionData.getUrlPattern().equals(url))
+                .findFirst()
+                .orElseThrow(NullPointerException::new);
     }
 
     @PostConstruct
