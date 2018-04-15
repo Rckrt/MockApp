@@ -1,6 +1,8 @@
 package com.sessionmock.SessionMock.services.impl;
 
 import com.mongodb.BasicDBObject;
+import com.sessionmock.SessionMock.exceptions.DefaultDataNotFound;
+import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
@@ -8,7 +10,6 @@ import com.sessionmock.SessionMock.repositories.SessionDataRepository;
 import com.sessionmock.SessionMock.services.RequestMappingService;
 import com.sessionmock.SessionMock.services.SerializationService;
 import com.sessionmock.SessionMock.services.SessionService;
-import com.sessionmock.SessionMock.services.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,10 +52,9 @@ public class SessionServiceImpl implements SessionService{
     }
 
     @Override
-    //TODO: throw custom exception
-    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, String body) throws IOException {
+    public SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, String body) throws CloneNotSupportedException, DefaultDataNotFound, PreviousRequestNotExist {
         Map<Pattern,String> currentIdentifierMap = buildIdentifierMap(requestPattern.getIdentifierPatterns(), request);
-        if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap)) throw new NullPointerException();
+        if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap)) throw new PreviousRequestNotExist(request);
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
         return saveRequest(requestPattern.getUrlPattern(), currentIdentifierMap, body, isDataMustBeUpdated());
     }
@@ -79,27 +79,21 @@ public class SessionServiceImpl implements SessionService{
         }
 
     //TODO: change to update logic and save body
-    private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, String body , boolean isUpdate){
+    private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, String body , boolean isUpdate) throws CloneNotSupportedException, DefaultDataNotFound {
         SessionData dataUnderUrl =  sessionDataRepository.findByUrlPatternAndSessionAttributeValues(url, currentIdentifierMap);
         if (dataUnderUrl == null) {
-            //TODO custom exceptions
-            try {
-                dataUnderUrl = getDefaultRequest(url).clone();
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
+            dataUnderUrl = getDefaultSessionData(url).clone();
         }
         if (isUpdate) dataUnderUrl.setData(BasicDBObject.parse(body));
         dataUnderUrl.setSessionAttributeValues(currentIdentifierMap);
         return sessionDataRepository.save(dataUnderUrl);
     }
 
-    //TODO: custom exception
-    private SessionData getDefaultRequest(String url) {
+    private SessionData getDefaultSessionData(String url) throws DefaultDataNotFound {
         return serializationService.getDefaultSessionData().stream()
                 .filter(sessionData -> sessionData.getUrlPattern().equals(url))
                 .findFirst()
-                .orElseThrow(NullPointerException::new);
+                .orElseThrow(() -> new DefaultDataNotFound(url));
     }
 
     @PostConstruct

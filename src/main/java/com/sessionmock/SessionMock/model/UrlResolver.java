@@ -1,5 +1,6 @@
 package com.sessionmock.SessionMock.model;
 
+import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,8 +39,7 @@ public class UrlResolver {
         }
     }
 
-    //TODO: custom Exception
-    public String findUrl(String url){
+    public String findUrl(String url) throws UrlNotFoundException {
         UrlResolver current = ROOT;
         for(String key : url.split("/")) {
             if ("".equals(key)) continue;
@@ -57,10 +57,10 @@ public class UrlResolver {
         return child;
     }
 
-    private UrlResolver findChildByKey(String key, UrlResolver current) {
+    private UrlResolver findChildByKey(String key, UrlResolver current) throws UrlNotFoundException {
         return current.getChildes().stream()
                 .filter(ell -> ell.checkEquality(key))
-                .findFirst().orElse(null);
+                .findFirst().orElseThrow(() -> new UrlNotFoundException(current.fullPath + key));
     }
 
     private UrlResolver findChildByKey(String key) {

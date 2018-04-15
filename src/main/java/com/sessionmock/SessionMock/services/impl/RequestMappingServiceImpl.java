@@ -1,5 +1,7 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
+import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.UrlResolver;
 import com.sessionmock.SessionMock.services.RequestMappingService;
@@ -30,8 +32,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     }
 
     @Override
-    //TODO: throw custom exception
-    public RequestPattern findRequestPattern(HttpServletRequest request) {
+    public RequestPattern findRequestPattern(HttpServletRequest request) throws RequestPatternNotFoundException, UrlNotFoundException {
         return urlMapping
                 //TODO: delete shity hardcode
             .get(urlResolver.findUrl(request.getRequestURI()))
@@ -39,7 +40,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
             .filter(pattern -> pattern.getRequestMethod().toString().equals(request.getMethod()))
             //TODO: get pattern by cookie/header/parameters
             .findFirst()
-            .orElseThrow(NullPointerException::new);
+            .orElseThrow(() -> new RequestPatternNotFoundException(request));
     }
 
     @Override

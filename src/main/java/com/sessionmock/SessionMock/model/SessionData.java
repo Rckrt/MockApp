@@ -2,6 +2,7 @@ package com.sessionmock.SessionMock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mongodb.BasicDBObject;
+import com.sessionmock.SessionMock.exceptions.SessionDataCloneExcpetion;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -28,8 +29,8 @@ public class SessionData{
         return new ResponseEntity<>(data, response.getStatus());
     }
 
-    public SessionData clone() throws CloneNotSupportedException{
-        SessionData obj=(SessionData)super.clone();
+    public SessionData clone() throws CloneNotSupportedException {
+        SessionData obj = (SessionData)super.clone();
         obj.urlPattern = urlPattern;
         obj.response = response;
         obj.sessionAttributeValues = sessionAttributeValues;
