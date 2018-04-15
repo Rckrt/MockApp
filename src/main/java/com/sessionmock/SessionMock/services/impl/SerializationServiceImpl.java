@@ -1,6 +1,7 @@
 package com.sessionmock.SessionMock.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sessionmock.SessionMock.exceptions.SerializationException;
 import com.sessionmock.SessionMock.model.SessionData;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.SerializationService;
@@ -50,7 +51,13 @@ public class SerializationServiceImpl implements SerializationService {
 
   private void serializeAllDefaultData() {
     this.defaultData = Arrays.stream(getAllFiles(defaultDataPath))
-            .map(e -> serializeClass(e, SessionData.class))
+            .map(e -> {
+              try {
+                return serializeClass(e, SessionData.class);
+              } catch (SerializationException e1) {
+                throw new RuntimeException(e1);
+              }
+            })
             .collect(Collectors.toList());
   }
 
@@ -63,7 +70,13 @@ public class SerializationServiceImpl implements SerializationService {
 
   private void serializeAllRequestPatterns(){
     this.requestPatterns = Arrays.stream(getAllFiles(requestPatternsPath))
-            .map(e -> serializeClass(e, RequestPattern.class))
+            .map(e -> {
+              try {
+                return serializeClass(e, RequestPattern.class);
+              } catch (SerializationException e1) {
+                throw new RuntimeException(e1);
+              }
+            })
             .collect(Collectors.toList());
   }
 
@@ -100,12 +113,12 @@ public class SerializationServiceImpl implements SerializationService {
     }
   }
 
-  private <T> T serializeClass(File file, Class<T> cls){
+  private <T> T serializeClass(File file, Class<T> cls) throws SerializationException {
     try {
       return objectMapper.readValue(file, cls);
-    } catch (IOException ignored) {
-      log.info("serialization error {}" ,ignored);
-    throw new NullPointerException("can't serialize " + file.getPath());
+    } catch (IOException cause) {
+      log.info("Serialization error {}", cause);
+      throw new SerializationException(file, cls, cause);
     }
   }
 }
