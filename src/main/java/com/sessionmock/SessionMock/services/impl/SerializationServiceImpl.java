@@ -44,6 +44,7 @@ public class SerializationServiceImpl implements SerializationService {
 
   @PostConstruct
   private void init() {
+    //objectMapper.enableDefaultTyping();
     serializeAllRequestPatterns();
     serializeAllScenarios();
     serializeAllDefaultData();

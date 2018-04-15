@@ -5,11 +5,13 @@ import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.*;
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Service
+@Slf4j
 public class RequestServiceImpl implements RequestService {
 
     private final ValidationService validationService;
@@ -24,7 +26,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Object execute(HttpServletRequest request, String body) throws RequestPatternNotFoundException, IOException,
-            UrlNotFoundException, CloneNotSupportedException, PreviousRequestNotExist, DefaultDataNotFound, PatternValidationException {
+            UrlNotFoundException,PreviousRequestNotExist, DefaultDataNotFound, PatternValidationException {
+        log.info("Start execute request {} with body {}", request, body);
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern, body);
         return sessionService.findResponse(requestPattern, request, body).getResponseEntity();

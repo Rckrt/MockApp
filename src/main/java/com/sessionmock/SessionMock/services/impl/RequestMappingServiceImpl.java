@@ -8,6 +8,8 @@ import com.sessionmock.SessionMock.services.RequestMappingService;
 import com.sessionmock.SessionMock.services.SerializationService;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class RequestMappingServiceImpl implements RequestMappingService {
 
     private final Map<RequestPattern, List<RequestPattern>> requestPatternGraph = new HashMap<>();
@@ -33,6 +36,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
 
     @Override
     public RequestPattern findRequestPattern(HttpServletRequest request) throws RequestPatternNotFoundException, UrlNotFoundException {
+        log.info("Pattern search began for request {}", request);
         return urlMapping
                 //TODO: delete shity hardcode
             .get(urlResolver.findUrl(request.getRequestURI()))

@@ -25,19 +25,12 @@ public class SingleController {
     }
 
     @RequestMapping("**")
-    @ExceptionHandler({ IOException.class , PreviousRequestNotExist.class , CloneNotSupportedException.class ,
-            UrlNotFoundException.class , RequestPatternNotFoundException.class , DefaultDataNotFound.class,
-            PatternValidationException.class })
     Object getAllRequests(
         HttpServletRequest request,
-        @RequestParam(required = false) Map<String, String> allRequestParams,
-        @RequestHeader(required = false) Map<String, String> allRequestHeaders,
-        @RequestBody(required = false) String body) throws CloneNotSupportedException, DefaultDataNotFound, IOException,
-            UrlNotFoundException, PreviousRequestNotExist, RequestPatternNotFoundException, PatternValidationException {
-        log.info("allRequestParams: {}", allRequestParams);
-        log.info("allRequestHeaders: {}", allRequestHeaders);
-        log.info("some body: {}", body);
-        log.info("request: {}", request);
+        @RequestBody(required = false) String body) throws
+            RequestPatternNotFoundException, PatternValidationException, PreviousRequestNotExist,
+            DefaultDataNotFound, UrlNotFoundException, IOException {
+        log.info("Get request {} with some body: {}",request, body);
         return requestService.execute(request, body);
     }
 }

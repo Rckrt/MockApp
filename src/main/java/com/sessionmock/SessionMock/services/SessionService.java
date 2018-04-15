@@ -11,5 +11,5 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface SessionService {
 
-    SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, String body) throws CloneNotSupportedException, DefaultDataNotFound, PreviousRequestNotExist;
+    SessionData findResponse(RequestPattern requestPattern, HttpServletRequest request, String body) throws  DefaultDataNotFound, PreviousRequestNotExist;
 }

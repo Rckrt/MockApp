@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 @Document(collection = "sessiondata")
@@ -19,7 +20,9 @@ public class SessionData{
     private ObjectId _id;
     private String urlPattern;
     @JsonIgnore
-    private Map<Pattern, String> sessionAttributeValues;
+    private List<String> patternValues;
+    @JsonIgnore
+    private List<Pattern> patterns;
     private Response response;
     private BasicDBObject data;
 
@@ -28,12 +31,16 @@ public class SessionData{
         return new ResponseEntity<>(data, response.getStatus());
     }
 
-    public SessionData clone() throws CloneNotSupportedException {
-        SessionData obj = (SessionData)super.clone();
-        obj.urlPattern = urlPattern;
-        obj.response = response;
-        obj.sessionAttributeValues = sessionAttributeValues;
-        obj.data = data;
-        return obj;
+    public SessionData(SessionData sessionData) {
+        this.urlPattern = sessionData.getUrlPattern();
+        this.data = sessionData.getData();
+        this.response = sessionData.getResponse();
+        this.patterns = sessionData.getPatterns();
+        this.patternValues = sessionData.getPatternValues();
+    }
+
+    public void addSessionAttributeValues(List<Pattern> patterns, List<String> patternValues) {
+        this.patterns = patterns;
+        this.patternValues = patternValues;
     }
 }

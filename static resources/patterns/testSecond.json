@@ -1,5 +1,11 @@
 {"urlPattern" : "/test",
 "nickname" : "testSecond",
 "requestMethod": "POST",
-"allPatterns": [],
+"allPatterns": [
+  { "@type" : "Attribute",
+    "name" : "fa",
+    "valueRegex" : "\\d",
+    "identifier" : true
+  }
+],
 "schema": {}}

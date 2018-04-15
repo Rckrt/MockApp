@@ -2,12 +2,14 @@ package com.sessionmock.SessionMock.model;
 
 import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.sessionmock.SessionMock.model.constants.Constants.PATH_PARAM_IDENTIFIER;
 
+@Slf4j
 public class UrlResolver {
     public static final UrlResolver ROOT = new UrlResolver();
     @Getter
@@ -39,6 +41,7 @@ public class UrlResolver {
     }
 
     public String findUrl(String url) throws UrlNotFoundException {
+        log.info("try ti search url in tree {}", url);
         UrlResolver current = ROOT;
         for(String key : url.split("/")) {
             if ("".equals(key)) continue;

@@ -13,7 +13,7 @@ public interface SessionDataRepository extends CrudRepository<SessionData, Strin
 
     List<SessionData> findAllByUrlPattern(String urlPattern);
 
-    SessionData findByUrlPatternAndSessionAttributeValues(String urlPattern, Map<Pattern, String> sessionAttributeValues);
+    SessionData findByUrlPatternAndPatternsAndPatternValues(String utl, List<Pattern> patterns, List<String> values);
 
 
 }

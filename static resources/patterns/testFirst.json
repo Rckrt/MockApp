@@ -1,5 +1,10 @@
 {"urlPattern" : "/test",
 "nickname" : "testFirst",
 "requestMethod": "GET",
-"allPatterns": [],
+"allPatterns": [
+  { "@type" : "Attribute",
+    "name" : "fa",
+    "valueRegex" : "\\d",
+    "identifier" : true
+  }],
 "schema": {}}

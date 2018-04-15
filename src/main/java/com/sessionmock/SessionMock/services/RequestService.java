@@ -10,5 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface RequestService {
 
-    Object execute(HttpServletRequest request, String body) throws IOException, RequestPatternNotFoundException, UrlNotFoundException, CloneNotSupportedException, PreviousRequestNotExist, DefaultDataNotFound, PatternValidationException;
+    Object execute(HttpServletRequest request, String body) throws IOException, RequestPatternNotFoundException,
+            UrlNotFoundException, PreviousRequestNotExist, DefaultDataNotFound, PatternValidationException;
 }

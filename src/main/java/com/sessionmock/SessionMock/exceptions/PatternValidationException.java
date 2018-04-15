@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class PatternValidationException extends Exception{
 
     public PatternValidationException(Pattern pattern, String value){
-        super("Value " + value + "doesn't match" + pattern.getPatternType() + " pattern "
+        super("Value " + value + "doesn't match pattern "
                 + pattern.getName() + " " + pattern.getValueRegex());
     }
 }

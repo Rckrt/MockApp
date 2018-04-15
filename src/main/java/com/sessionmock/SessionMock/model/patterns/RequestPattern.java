@@ -1,8 +1,9 @@
 package com.sessionmock.SessionMock.model.patterns;
 
-import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,19 +17,9 @@ public class RequestPattern {
     private String urlPattern;
     private String nickname;
     private RequestType requestMethod;
-    private List<Pattern> allPatterns = new ArrayList<>();
+    private List<Pattern> allPatterns;
     private JSONObject schema;
     private boolean isInitial = false;
-
-    public void addPattern(Pattern pattern){
-       allPatterns.add(pattern);
-    }
-
-    public List<Pattern> getPatternsByPatternType(PatternType patternType){
-        return allPatterns.stream()
-                .filter(pattern -> pattern.patternType.equals(patternType))
-                .collect(Collectors.toList());
-    }
 
     public List<Pattern> getIdentifierPatterns() {
         return allPatterns.stream()
