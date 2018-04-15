@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class SessionServiceImpl implements SessionService{
@@ -68,17 +69,22 @@ public class SessionServiceImpl implements SessionService{
     }
 
     private boolean isPreviousRequestExist(RequestPattern requestPattern, HttpServletRequest request,
-                                          Map<Pattern,String> currentIdentifierMap){
+                                          Map<Pattern,String> currentIdentifierMap) throws PreviousRequestNotExist {
         if (!requestPattern.isInitial()) {
             List<RequestPattern> previousRequestPatterns = getPreviousPatterns(requestPattern, request);
-            return previousRequestPatterns.stream()
-                    .anyMatch(pattern -> sessionAttributes.get(pattern).contains(currentIdentifierMap));
+            try (Stream<RequestPattern> str = previousRequestPatterns.stream()){
+                return str.anyMatch(pattern -> sessionAttributes.get(pattern).contains(currentIdentifierMap));
             }
+            catch (NullPointerException e){
+                throw new PreviousRequestNotExist(request);
+            }
+        }
             return true;
         }
 
     //TODO: change to update logic and save body
-    private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, String body , boolean isUpdate) throws CloneNotSupportedException, DefaultDataNotFound {
+    private SessionData saveRequest(String url, Map<Pattern, String> currentIdentifierMap, String body , boolean isUpdate)
+            throws CloneNotSupportedException, DefaultDataNotFound {
         SessionData dataUnderUrl =  sessionDataRepository.findByUrlPatternAndSessionAttributeValues(url, currentIdentifierMap);
         if (dataUnderUrl == null) {
             dataUnderUrl = getDefaultSessionData(url).clone();
