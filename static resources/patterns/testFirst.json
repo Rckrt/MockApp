@@ -1,6 +1,7 @@
 {"urlPattern" : "/test",
-"nickname" : "testFirst",
-"requestMethod": "GET",
+  "nickname" : "testFirst",
+  "requestMethod": "GET",
+  "updatable" : false,
 "allPatterns": [
   { "@type" : "Attribute",
     "name" : "fa",

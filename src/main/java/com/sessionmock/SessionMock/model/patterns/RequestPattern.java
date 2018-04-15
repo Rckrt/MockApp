@@ -2,8 +2,6 @@ package com.sessionmock.SessionMock.model.patterns;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +18,7 @@ public class RequestPattern {
     private List<Pattern> allPatterns;
     private JSONObject schema;
     private boolean isInitial = false;
+    private boolean updatable;
 
     public List<Pattern> getIdentifierPatterns() {
         return allPatterns.stream()

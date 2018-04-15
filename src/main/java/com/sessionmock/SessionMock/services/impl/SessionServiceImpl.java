@@ -3,6 +3,7 @@ package com.sessionmock.SessionMock.services.impl;
 import com.mongodb.BasicDBObject;
 import com.sessionmock.SessionMock.exceptions.DefaultDataNotFound;
 import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
+import com.sessionmock.SessionMock.model.enums.RequestType;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.SessionData;
@@ -27,6 +28,7 @@ public class SessionServiceImpl implements SessionService{
     private final RequestMappingService requestMappingService;
     private final SessionDataRepository sessionDataRepository;
     private final SerializationService serializationService;
+    private final Set<RequestType> updatable = new HashSet<>(Arrays.asList(RequestType.POST, RequestType.PUT));
     private Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes = new HashMap<>();
 
 
@@ -37,7 +39,7 @@ public class SessionServiceImpl implements SessionService{
         this.serializationService = serializationService;
     }
 
-
+    //TODO: MOVE
     private List<RequestPattern> getPreviousPatterns(RequestPattern requestPattern) {
             List<Pattern> patternsList = requestPattern.getIdentifierPatterns();
             return requestMappingService
@@ -76,13 +78,11 @@ public class SessionServiceImpl implements SessionService{
         if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap)) throw new PreviousRequestNotExist(request);
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
         return saveRequest(requestPattern.getUrlPattern(), identifierPatterns, identifierPatternsValues,
-                body, isDataMustBeUpdated());
+                body, isDataMustBeUpdated(requestPattern));
     }
 
-    //implement logic
-    private boolean isDataMustBeUpdated() {
-
-        return false;
+    private boolean isDataMustBeUpdated(RequestPattern requestPattern) {
+        return requestPattern.isUpdatable() && updatable.contains(requestPattern.getRequestMethod());
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {
@@ -109,7 +109,7 @@ public class SessionServiceImpl implements SessionService{
         }
 
 
-    //TODO: change to update logic and save body
+    //TODO: change to update, delete and get logic
     private SessionData saveRequest(String url, List<Pattern> patterns, List<String> values, String body , boolean isUpdate)
             throws DefaultDataNotFound {
         log.info("Start saving request for url {} with body {}",url, body);

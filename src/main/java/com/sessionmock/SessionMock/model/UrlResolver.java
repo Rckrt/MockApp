@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sessionmock.SessionMock.model.constants.Constants.PATH_DELIMITER;
 import static com.sessionmock.SessionMock.model.constants.Constants.PATH_PARAM_IDENTIFIER;
 
 @Slf4j
@@ -32,9 +33,9 @@ public class UrlResolver {
 
     public void addUrl(String url){
         UrlResolver current = ROOT;
-        for(String key : url.split("/")) {
+        for(String key : url.split(PATH_DELIMITER)) {
             if ("".equals(key)) continue;
-            String fullPath = "/" + current.getFullPath() + key;
+            String fullPath = PATH_DELIMITER + current.getFullPath() + key;
             current = current.addChild(key);
             current.fullPath = fullPath;
         }
@@ -43,7 +44,7 @@ public class UrlResolver {
     public String findUrl(String url) throws UrlNotFoundException {
         log.info("try ti search url in tree {}", url);
         UrlResolver current = ROOT;
-        for(String key : url.split("/")) {
+        for(String key : url.split(PATH_DELIMITER)) {
             if ("".equals(key)) continue;
             current = findChildByKey(key, current);
         }

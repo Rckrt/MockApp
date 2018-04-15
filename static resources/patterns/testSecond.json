@@ -1,11 +1,12 @@
-{"urlPattern" : "/test",
-"nickname" : "testSecond",
-"requestMethod": "POST",
-"allPatterns": [
-  { "@type" : "Attribute",
-    "name" : "fa",
-    "valueRegex" : "\\d",
-    "identifier" : true
-  }
+{ "urlPattern" : "/test",
+  "nickname" : "testSecond",
+  "requestMethod": "POST",
+  "updatable": true,
+  "allPatterns": [
+    { "@type" : "Attribute",
+      "name" : "fa",
+      "valueRegex" : "\\d",
+      "identifier" : true
+    }
 ],
 "schema": {}}

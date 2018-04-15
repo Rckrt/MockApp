@@ -38,11 +38,12 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     public RequestPattern findRequestPattern(HttpServletRequest request) throws RequestPatternNotFoundException, UrlNotFoundException {
         log.info("Pattern search began for request {}", request);
         return urlMapping
-                //TODO: delete shity hardcode
             .get(urlResolver.findUrl(request.getRequestURI()))
             .stream()
-            .filter(pattern -> pattern.getRequestMethod().toString().equals(request.getMethod()))
-            //TODO: get pattern by cookie/header/parameters
+            .filter(requestPattern -> requestPattern.getRequestMethod().toString().equals(request.getMethod()) &&
+                    requestPattern.getAllPatterns()
+                            .stream()
+                            .noneMatch(pattern -> pattern.getPatternValue(request)==null))
             .findFirst()
             .orElseThrow(() -> new RequestPatternNotFoundException(request));
     }
