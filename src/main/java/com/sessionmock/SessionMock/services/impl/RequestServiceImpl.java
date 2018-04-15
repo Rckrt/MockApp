@@ -1,5 +1,9 @@
 package com.sessionmock.SessionMock.services.impl;
 
+import com.sessionmock.SessionMock.exceptions.DefaultDataNotFound;
+import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
+import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
+import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.*;
 import java.io.IOException;
@@ -22,7 +26,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Object execute(HttpServletRequest request, String body) throws IOException {
+    public Object execute(HttpServletRequest request, String body) throws RequestPatternNotFoundException,
+            UrlNotFoundException, IOException, CloneNotSupportedException, PreviousRequestNotExist, DefaultDataNotFound {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern, body);
         return sessionService.findResponse(requestPattern, request, body).getResponseEntity();

@@ -1,6 +1,10 @@
 package com.sessionmock.SessionMock.controller;
 
 
+import com.sessionmock.SessionMock.exceptions.DefaultDataNotFound;
+import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
+import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
+import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
 import com.sessionmock.SessionMock.services.RequestService;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +28,14 @@ public class SingleController {
     }
 
     @RequestMapping("**")
+    @ExceptionHandler({ IOException.class , PreviousRequestNotExist.class , CloneNotSupportedException.class ,
+            UrlNotFoundException.class , RequestPatternNotFoundException.class , DefaultDataNotFound.class })
     Object getAllRequests(
         HttpServletRequest request,
         @RequestParam(required = false) Map<String, String> allRequestParams,
         @RequestHeader(required = false) Map<String, String> allRequestHeaders,
-        @RequestBody(required = false) String body) throws IOException {
+        @RequestBody(required = false) String body) throws CloneNotSupportedException, DefaultDataNotFound, IOException,
+            UrlNotFoundException, PreviousRequestNotExist, RequestPatternNotFoundException {
         log.info("allRequestParams: {}", allRequestParams);
         log.info("allRequestHeaders: {}", allRequestHeaders);
         log.info("some body: {}", body);

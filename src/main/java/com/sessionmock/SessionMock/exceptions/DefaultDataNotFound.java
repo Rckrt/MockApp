@@ -6,15 +6,4 @@ public class DefaultDataNotFound extends Exception{
         super("Default data not found for URL " + url);
     }
 
-    public DefaultDataNotFound() {
-        super();
-    }
-
-    public DefaultDataNotFound(Throwable cause) {
-        super(cause);
-    }
-
-    public DefaultDataNotFound(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

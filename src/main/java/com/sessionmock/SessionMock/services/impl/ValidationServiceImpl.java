@@ -4,7 +4,6 @@ import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.ValidationService;
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,7 @@ public class ValidationServiceImpl implements ValidationService {
     }
 
     //TODO: implement logic
-    private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern)
-        throws IOException {
+    private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern) {
 
     }
 }
