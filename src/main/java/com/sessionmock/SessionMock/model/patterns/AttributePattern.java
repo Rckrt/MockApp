@@ -1,6 +1,9 @@
 package com.sessionmock.SessionMock.model.patterns;
 
+import com.sessionmock.SessionMock.exceptions.PatternValidationException;
 import com.sessionmock.SessionMock.model.enums.PatternType;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class AttributePattern extends Pattern{
 
@@ -8,8 +11,10 @@ public class AttributePattern extends Pattern{
         patternType = PatternType.ATTRIBUTE;
     }
 
+
     @Override
-    public boolean validate(Object o) {
-        return false;
+    public void isMatches(HttpServletRequest request) throws PatternValidationException {
+       if (!request.getHeader(name).matches(valueRegex))
+           throw new PatternValidationException(this, request.getHeader(name));
     }
 }
