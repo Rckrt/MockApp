@@ -1,3 +1,11 @@
-{"urlPattern" : "/test",
-"response" : {"status" : "OK"},
-"data": {"message" : "fix it"}}
+{ "urlPattern" : "/test",
+  "response" : {
+    "status" : "OK",
+    "headerMap" : {
+      "testHeader" : ["value"]
+    }
+  },
+  "data": {
+    "message" : "fix it"
+  }
+}

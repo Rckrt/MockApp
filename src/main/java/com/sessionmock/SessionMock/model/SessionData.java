@@ -1,16 +1,16 @@
 package com.sessionmock.SessionMock.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mongodb.BasicDBObject;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
-import java.util.Map;
 
 @Document(collection = "sessiondata")
 @Data
@@ -24,11 +24,13 @@ public class SessionData{
     @JsonIgnore
     private List<Pattern> patterns;
     private Response response;
-    private BasicDBObject data;
+    private Object data;
 
     //TODO: change logic if headers are added
     public ResponseEntity getResponseEntity(){
-        return new ResponseEntity<>(data, response.getStatus());
+        MultiValueMap<String, String> headerMap = new LinkedMultiValueMap<>();
+        headerMap.putAll(response.getHeaderMap());
+        return new ResponseEntity<>(data, headerMap, response.getStatus());
     }
 
     public SessionData(SessionData sessionData) {

@@ -113,12 +113,12 @@ public class SessionServiceImpl implements SessionService{
     private SessionData saveRequest(String url, List<Pattern> patterns, List<String> values, String body , boolean isUpdate)
             throws DefaultDataNotFound {
         log.info("Start saving request for url {} with body {}",url, body);
-        SessionData dataUnderUrl =  sessionDataRepository.findByUrlPatternAndPatternsAndPatternValues(url, patterns, values );
+        SessionData dataUnderUrl =  sessionDataRepository.findByUrlPatternAndPatternsAndPatternValues(url, patterns, values);
         if (dataUnderUrl == null) {
             log.info("Save based on default data");
             dataUnderUrl = new SessionData(getDefaultSessionData(url));
         }
-        if (isUpdate) dataUnderUrl.setData(BasicDBObject.parse(body));
+        if (isUpdate) dataUnderUrl.setData(body);
         dataUnderUrl.addSessionAttributeValues(patterns, values);
         return sessionDataRepository.save(dataUnderUrl);
     }
