@@ -98,9 +98,12 @@ public class SessionServiceImpl implements SessionService{
         if (!requestPattern.isInitial()) {
             List<RequestPattern> previousRequestPatterns = getPreviousPatterns(requestPattern);
             try (Stream<RequestPattern> str = previousRequestPatterns.stream()){
-                return str.anyMatch(pattern -> sessionAttributes.get(pattern).contains(currentIdentifierMap));
+                sessionAttributes.remove(str
+                            .filter(pattern -> sessionAttributes.get(pattern).contains(currentIdentifierMap))
+                            .findFirst().get());
+                return true;
             }
-            catch (NullPointerException e){
+            catch (Exception e){
                 log.error("Catch error - previous request not exist", e);
                 throw new PreviousRequestNotExist(request);
             }

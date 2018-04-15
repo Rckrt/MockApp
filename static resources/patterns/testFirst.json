@@ -7,5 +7,10 @@
     "name" : "fa",
     "valueRegex" : "\\d",
     "identifier" : true
+  },
+  { "@type" : "Attribute",
+    "name" : "fb",
+    "valueRegex" : "\\d",
+    "identifier" : true
   }],
 "schema": {}}
