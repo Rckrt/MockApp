@@ -8,6 +8,4 @@ public interface SerializationService {
     List<List<RequestPattern>> getScenariosList();
 
     RequestPattern findPatternByNickname(String nickname);
-
-    List<SessionData> getDefaultSessionData();
 }

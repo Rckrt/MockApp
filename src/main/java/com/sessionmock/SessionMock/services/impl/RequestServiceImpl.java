@@ -30,6 +30,7 @@ public class RequestServiceImpl implements RequestService {
         log.info("Start execute request {} with body {}", request, body);
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern, body);
-        return sessionService.findResponse(requestPattern, request, body).getResponseEntity();
+        sessionService.addToSession(requestPattern, request, body);
+        return null;
     }
 }

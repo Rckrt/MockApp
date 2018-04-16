@@ -34,8 +34,6 @@ public class SerializationServiceImpl implements SerializationService {
 
   private List<List<RequestPattern>> scenariosList;
 
-  private List<SessionData> defaultData;
-
   private final ObjectMapper objectMapper;
 
   public SerializationServiceImpl() {
@@ -43,23 +41,10 @@ public class SerializationServiceImpl implements SerializationService {
   }
 
   @PostConstruct
+  //TODO load groovy scripts
   private void init() {
-    //objectMapper.enableDefaultTyping();
     serializeAllRequestPatterns();
     serializeAllScenarios();
-    serializeAllDefaultData();
-  }
-
-  private void serializeAllDefaultData() {
-    this.defaultData = Arrays.stream(getAllFiles(defaultDataPath))
-            .map(e -> {
-              try {
-                return serializeClass(e, SessionData.class);
-              } catch (SerializationException e1) {
-                throw new RuntimeException(e1);
-              }
-            })
-            .collect(Collectors.toList());
   }
 
   private void serializeAllScenarios() {
@@ -98,10 +83,6 @@ public class SerializationServiceImpl implements SerializationService {
             .findFirst().get();
   }
 
-  @Override
-  public List<SessionData> getDefaultSessionData() {
-    return defaultData;
-  }
 
   private List<RequestPattern> getPatternListFromFile(File file){
     try {

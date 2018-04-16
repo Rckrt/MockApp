@@ -3,21 +3,15 @@ package com.sessionmock.SessionMock.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import lombok.*;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
-@Document(collection = "sessiondata")
 @Data
 @NoArgsConstructor
 public class SessionData{
-    @Id
-    private ObjectId _id;
     private String urlPattern;
     @JsonIgnore
     private List<String> patternValues;
