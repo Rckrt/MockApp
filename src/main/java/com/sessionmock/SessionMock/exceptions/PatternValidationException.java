@@ -9,6 +9,6 @@ public class PatternValidationException extends Exception{
 
     public PatternValidationException(Pattern pattern, String value){
         super("Value " + value + "doesn't match pattern "
-                + pattern.getName() + " " + pattern.getValueRegex());
+                + pattern.getName() + " " );
     }
 }

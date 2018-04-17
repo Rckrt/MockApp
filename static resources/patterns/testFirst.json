@@ -1,16 +1,23 @@
 {"urlPattern" : "/test",
   "nickname" : "testFirst",
   "requestMethod": "GET",
-  "updatable" : false,
-"allPatterns": [
-  { "@type" : "Attribute",
-    "name" : "fa",
-    "valueRegex" : "\\d",
-    "identifier" : true
+  "allPatterns": [
+    { "@type" : "attr",
+      "name" : "fa",
+      "valueRegex" : "\\d",
+      "identifier" : true
+    },
+    { "@type" : "attr",
+      "name" : "fb",
+      "valueRegex" : "\\d",
+      "identifier" : true
+    }],
+  "script" : "Main.groovy",
+  "scriptParams" : ["attr:fa"],
+  "response" : {
+    "status" : "OK",
+    "headerMap" : {
+      "testHeader" : ["value"]
+    }
   },
-  { "@type" : "Attribute",
-    "name" : "fb",
-    "valueRegex" : "\\d",
-    "identifier" : true
-  }],
 "schema": {}}

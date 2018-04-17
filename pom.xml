@@ -27,7 +27,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -36,8 +42,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>RELEASE</version>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+			<version>2.0.1.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -61,6 +67,13 @@
 			<artifactId>org.everit.json.schema</artifactId>
 			<version>1.5.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy -->
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+			<version>1.8.6</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

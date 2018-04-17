@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class AttributePattern extends Pattern{
 
     private final PatternType patternType = PatternType.ATTRIBUTE;
+    protected String valueRegex;
 
     @Override
     public void isMatches(HttpServletRequest request) throws PatternValidationException {
@@ -26,5 +27,10 @@ public class AttributePattern extends Pattern{
     @Override
     public String getPatternValue(HttpServletRequest request) {
         return request.getParameter(name);
+    }
+
+    @Override
+    public String buildScriptIdentifier() {
+        return "attr:" + name ;
     }
 }

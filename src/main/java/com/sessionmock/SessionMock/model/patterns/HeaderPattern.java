@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class HeaderPattern extends Pattern {
 
     private final PatternType patternType = PatternType.HEADER;
+    protected String valueRegex;
 
     @Override
     public void isMatches(HttpServletRequest request) throws PatternValidationException {
@@ -25,5 +26,10 @@ public class HeaderPattern extends Pattern {
     @Override
     public String getPatternValue(HttpServletRequest request) {
         return request.getHeader(name);
+    }
+
+    @Override
+    public String buildScriptIdentifier() {
+        return "header:" + name;
     }
 }

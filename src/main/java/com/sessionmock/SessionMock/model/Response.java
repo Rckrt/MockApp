@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -14,4 +15,5 @@ import java.util.List;
 public class Response {
     private HttpStatus status;
     private HashMap<String, List<String>> headerMap;
+    private Object body;
 }

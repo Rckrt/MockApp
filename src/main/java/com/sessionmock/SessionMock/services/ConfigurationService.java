@@ -1,14 +1,11 @@
 package com.sessionmock.SessionMock.services;
 
-import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ConfigurationService {
 
-    void restoreToDefault();
+    void restart();
 
-    void restoreToDefault(RequestPattern requestPattern);
-
-    void saveState();
+    void setPrefix(String prefix);
 }

@@ -23,4 +23,9 @@ public class CookiePattern extends Pattern {
     public String getPatternValue(HttpServletRequest request) {
         return null;
     }
+
+    @Override
+    public String buildScriptIdentifier() {
+        return null;
+    }
 }

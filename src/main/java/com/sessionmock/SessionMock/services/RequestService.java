@@ -11,5 +11,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface RequestService {
 
     Object execute(HttpServletRequest request, String body) throws IOException, RequestPatternNotFoundException,
-            UrlNotFoundException, PreviousRequestNotExist, DefaultDataNotFound, PatternValidationException;
+            UrlNotFoundException, PreviousRequestNotExist, DefaultDataNotFound, PatternValidationException, InvalidScriptParameters;
 }

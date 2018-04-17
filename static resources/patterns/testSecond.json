@@ -1,17 +1,21 @@
-{ "urlPattern" : "/test",
+{"urlPattern" : "/test",
   "nickname" : "testSecond",
   "requestMethod": "POST",
-  "updatable": true,
   "allPatterns": [
-    { "@type" : "Attribute",
+    { "@type" : "attr",
       "name" : "fa",
       "valueRegex" : "\\d",
       "identifier" : true
     },
-    { "@type" : "Attribute",
+    { "@type" : "attr",
       "name" : "fb",
       "valueRegex" : "\\d",
       "identifier" : true
+    }],
+  "response" : {
+    "status" : "OK",
+    "headerMap" : {
+      "testHeader" : ["value"]
     }
-],
-"schema": {}}
+  },
+  "schema": {}}

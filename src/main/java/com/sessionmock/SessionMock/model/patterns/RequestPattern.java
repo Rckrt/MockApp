@@ -1,13 +1,20 @@
 package com.sessionmock.SessionMock.model.patterns;
 
+import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
+import com.sessionmock.SessionMock.model.Response;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.sessionmock.SessionMock.model.enums.RequestType;
 
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @Data
 public class RequestPattern {
@@ -16,15 +23,31 @@ public class RequestPattern {
     private String nickname;
     private RequestType requestMethod;
     private List<Pattern> allPatterns;
+    private Response response;
     private JSONObject schema;
+    private String script;
+    private List<String> scriptParams;
     private boolean isInitial = false;
-    private boolean updatable;
 
     public List<Pattern> getIdentifierPatterns() {
         return allPatterns.stream()
                 .filter(Pattern::isIdentifier)
                 .collect(Collectors.toList());
     }
+
+    //TODO: implement logic
+    public List<Pattern> getScriptParamPatterns(List<String> scriptParams) throws InvalidScriptParameters {
+        List<Pattern> scriptParamPatterns = allPatterns.stream()
+                    .filter(pattern ->  scriptParams.contains(pattern.buildScriptIdentifier()))
+                    .collect(Collectors.toList());
+        if (scriptParams.containsAll(scriptParamPatterns
+                        .stream()
+                        .map(Pattern::buildScriptIdentifier)
+                        .collect(Collectors.toList())))
+             return scriptParamPatterns;
+        throw new InvalidScriptParameters(scriptParams, scriptParamPatterns);
+    }
+
     //TODO: maybe logic must be changed (equality)
     public boolean isContainsIdentifier(List<Pattern> patterns){
         return allPatterns.containsAll(patterns);
