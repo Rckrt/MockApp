@@ -1,7 +1,6 @@
 package com.sessionmock.SessionMock.services.impl;
 
 import com.sessionmock.SessionMock.exceptions.DefaultDataNotFound;
-import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
 import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
@@ -13,13 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import groovy.lang.GroovyShell;
 
 @Service
 @Slf4j
@@ -50,18 +45,6 @@ public class SessionServiceImpl implements SessionService{
         if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap, identifierPatterns))
             throw new PreviousRequestNotExist(request);
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
-    }
-
-    @Override
-    public Map<String,String> getResponseParamMap(RequestPattern requestPattern, HttpServletRequest request)
-            throws InvalidScriptParameters, IOException {
-        log.info("Start response data retrieving");
-        List<String> scriptParams = requestPattern
-                .getScriptParamPatterns(requestPattern.getScriptParams())
-                .stream()
-                .map(pattern -> pattern.getPatternValue(request))
-                .collect(Collectors.toList());
-        return executeScript(requestPattern, scriptParams);
     }
 
     private Map<Pattern,String> buildPatternValueMap(List<Pattern> patternList, HttpServletRequest request){
@@ -104,12 +87,5 @@ public class SessionServiceImpl implements SessionService{
             sessionAttributes.computeIfAbsent(requestPattern, k -> new ArrayList<>()).add(currentIdentifierMap);
             log.info("request identifiers saved");
         }
-    }
-
-
-    private Map<String, String> executeScript(RequestPattern requestPattern, List<String> params) throws IOException {
-        return (Map<String, String>) new GroovyShell()
-                .parse( new File( requestPattern.getScript() ) )
-                .invokeMethod("main", params);
     }
 }

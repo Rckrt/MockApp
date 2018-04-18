@@ -15,7 +15,4 @@ public interface SessionService {
 
     void addToSession(RequestPattern requestPattern, HttpServletRequest request, String body)
             throws  DefaultDataNotFound, PreviousRequestNotExist;
-
-
-    Map<String, String> getResponseParamMap(RequestPattern requestPattern, HttpServletRequest request) throws InvalidScriptParameters, IOException;
 }

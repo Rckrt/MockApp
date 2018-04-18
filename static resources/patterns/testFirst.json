@@ -12,12 +12,13 @@
       "valueRegex" : "\\d",
       "identifier" : true
     }],
-  "script" : "Main.groovy",
-  "scriptParams" : ["attr:fa"],
   "response" : {
     "status" : "OK",
     "headerMap" : {
       "testHeader" : ["value"]
-    }
+    },
+    "script" : "test.groovy",
+    "scriptParams" : ["attr:fa"],
+    "template" : "test.twig"
   },
 "schema": {}}

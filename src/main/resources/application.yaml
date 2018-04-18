@@ -4,5 +4,6 @@ application:
       patterns: ${PATTERNS_PATH}
       scenarios: ${SCENARIOS_PATH}
       scripts: ${SCRIPTS_PATH}
+      templates: ${TEMPLATES_PATH}
 server:
   port: 8080

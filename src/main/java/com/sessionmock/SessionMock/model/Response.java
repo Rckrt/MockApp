@@ -16,4 +16,7 @@ public class Response {
     private HttpStatus status;
     private HashMap<String, List<String>> headerMap;
     private Object body;
+    private String template;
+    private String script;
+    private List<String> scriptParams;
 }

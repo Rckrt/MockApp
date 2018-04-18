@@ -16,6 +16,9 @@
     "status" : "OK",
     "headerMap" : {
       "testHeader" : ["value"]
-    }
+    },
+    "script" : "Main.groovy",
+    "scriptParams" : ["attr:fa"],
+    "template" : "test.twig"
   },
   "schema": {}}

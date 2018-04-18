@@ -25,8 +25,6 @@ public class RequestPattern {
     private List<Pattern> allPatterns;
     private Response response;
     private JSONObject schema;
-    private String script;
-    private List<String> scriptParams;
     private boolean isInitial = false;
 
     public List<Pattern> getIdentifierPatterns() {
