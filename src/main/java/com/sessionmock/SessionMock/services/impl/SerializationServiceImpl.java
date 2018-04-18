@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,14 @@ public class SerializationServiceImpl implements SerializationService {
   @Value("${application.static.resources.scenarios}")
   private String scenariosPath;
 
+  @Value("${application.static.resources.templates}")
+  @Getter
+  private String templatePath;
+
+  @Value("${application.static.resources.scripts}")
+  @Getter
+  private String scriptPath;
+
   private List<RequestPattern> requestPatterns;
 
   private List<List<RequestPattern>> scenariosList;
@@ -37,7 +46,7 @@ public class SerializationServiceImpl implements SerializationService {
   }
 
   @PostConstruct
-  //TODO load groovy scripts
+
   private void init() {
     serializeAllRequestPatterns();
     serializeAllScenarios();

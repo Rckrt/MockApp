@@ -1,8 +1,9 @@
 package com.sessionmock.SessionMock.services.impl;
 
 import com.sessionmock.SessionMock.exceptions.*;
-import com.sessionmock.SessionMock.model.Response;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
+import com.sessionmock.SessionMock.model.response.Response;
+import com.sessionmock.SessionMock.model.response.TemplateResponse;
 import com.sessionmock.SessionMock.services.*;
 
 import java.io.File;
@@ -31,12 +32,6 @@ public class RequestServiceImpl implements RequestService {
     private final SessionService sessionService;
     private final RequestMappingService requestMappingService;
 
-    @Value("${application.static.resources.templates}")
-    private String templatePath;
-
-    @Value("${application.static.resources.scripts}")
-    private String scriptPath;
-
     public RequestServiceImpl(ValidationService validationService, SessionService sessionService, RequestMappingService requestMappingService) {
         this.validationService = validationService;
         this.sessionService = sessionService;
@@ -50,38 +45,15 @@ public class RequestServiceImpl implements RequestService {
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern, body);
         sessionService.addToSession(requestPattern, request, body);
-        return buildResponseEntity(requestPattern, getResponseParamMap(requestPattern, request));
+        return buildResponseEntity(requestPattern, request);
     }
 
-    private ResponseEntity buildResponseEntity(RequestPattern requestPattern , Map<String, Object> params){
+    private ResponseEntity buildResponseEntity(RequestPattern requestPattern , HttpServletRequest request){
         MultiValueMap<String, String> headerMap = new LinkedMultiValueMap<>();
         Response response = requestPattern.getResponse();
         headerMap.putAll(response.getHeaderMap());
-        String body = buildBody(response.getTemplate(), params);
+        String body = response.getBody(request);
         return new ResponseEntity<>(body, headerMap, response.getStatus());
-    }
-
-    private String buildBody(String templateFile,  Map<String, Object> params){
-        JtwigTemplate template = JtwigTemplate.fileTemplate(templatePath + File.separator + templateFile);
-        JtwigModel model = JtwigModel.newModel(params);
-        return template.render(model);
-    }
-
-    private Map<String, Object> executeScript(String script, List<String> params) throws IOException {
-        return (Map<String, Object>) new GroovyShell()
-                .parse(new File(scriptPath + File.separator + script))
-                .invokeMethod("main", params.toArray());
-    }
-
-    private Map<String,Object> getResponseParamMap(RequestPattern requestPattern, HttpServletRequest request)
-            throws InvalidScriptParameters, IOException {
-        log.info("Start response data retrieving");
-        List<String> scriptParams = requestPattern
-                .getScriptParamPatterns(requestPattern.getResponse().getScriptParams())
-                .stream()
-                .map(pattern -> pattern.getPatternValue(request))
-                .collect(Collectors.toList());
-        return executeScript(requestPattern.getResponse().getScript(), scriptParams);
     }
 }
 

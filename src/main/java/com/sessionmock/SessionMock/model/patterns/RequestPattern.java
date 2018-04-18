@@ -1,20 +1,15 @@
 package com.sessionmock.SessionMock.model.patterns;
 
 import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
-import com.sessionmock.SessionMock.model.Response;
+import com.sessionmock.SessionMock.model.response.Response;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.sessionmock.SessionMock.model.enums.RequestType;
 
 import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 @Data
 public class RequestPattern {

@@ -13,6 +13,7 @@
       "identifier" : true
     }],
   "response" : {
+    "@type" : "template",
     "status" : "OK",
     "headerMap" : {
       "testHeader" : ["value"]

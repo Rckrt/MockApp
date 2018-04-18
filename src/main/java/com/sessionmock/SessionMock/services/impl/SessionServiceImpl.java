@@ -30,11 +30,9 @@ public class SessionServiceImpl implements SessionService{
     }
 
     @PostConstruct
-    //TODO check state and save it or invalidate
     private void init(){}
 
     @Override
-    //TODO: build request instead of save
     public void addToSession(RequestPattern requestPattern, HttpServletRequest request, String body) throws
             DefaultDataNotFound, PreviousRequestNotExist {
         log.info("Start added request to session");
