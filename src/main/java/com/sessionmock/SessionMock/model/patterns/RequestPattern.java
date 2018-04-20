@@ -4,12 +4,15 @@ import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
 import com.sessionmock.SessionMock.model.response.Response;
 import lombok.Data;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.sessionmock.SessionMock.model.enums.RequestType;
 
 import org.json.JSONObject;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Data
 public class RequestPattern {
@@ -44,5 +47,9 @@ public class RequestPattern {
     //TODO: maybe logic must be changed (equality)
     public boolean isContainsIdentifier(List<Pattern> patterns){
         return allPatterns.containsAll(patterns);
+    }
+
+    public String buildBody(HttpServletRequest request) throws IOException, InvalidScriptParameters {
+        return response.getBody(request, this);
     }
 }

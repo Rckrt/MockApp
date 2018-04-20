@@ -48,11 +48,12 @@ public class RequestServiceImpl implements RequestService {
         return buildResponseEntity(requestPattern, request);
     }
 
-    private ResponseEntity buildResponseEntity(RequestPattern requestPattern , HttpServletRequest request){
+    private ResponseEntity buildResponseEntity(RequestPattern requestPattern , HttpServletRequest request)
+            throws IOException, InvalidScriptParameters {
         MultiValueMap<String, String> headerMap = new LinkedMultiValueMap<>();
         Response response = requestPattern.getResponse();
         headerMap.putAll(response.getHeaderMap());
-        String body = response.getBody(request);
+        String body = requestPattern.buildBody(request);
         return new ResponseEntity<>(body, headerMap, response.getStatus());
     }
 }

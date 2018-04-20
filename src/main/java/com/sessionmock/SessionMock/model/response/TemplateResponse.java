@@ -3,10 +3,7 @@ package com.sessionmock.SessionMock.model.response;
 import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import groovy.lang.GroovyShell;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 
@@ -16,6 +13,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.sessionmock.SessionMock.model.constants.Constants.SCRIPT_PATH;
+import static com.sessionmock.SessionMock.model.constants.Constants.TEMPLATE_PATH;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -27,31 +27,31 @@ public class TemplateResponse extends Response {
     private String script;
     private List<String> scriptParams;
 
-    private String buildBody(String templateFile,  Map<String, Object> params){
-        JtwigTemplate template = JtwigTemplate.fileTemplate(templatePath + File.separator + templateFile);
+
+    private String buildBody(Map<String, Object> params){
+        JtwigTemplate template = JtwigTemplate.fileTemplate(TEMPLATE_PATH + File.separator + this.template);
         JtwigModel model = JtwigModel.newModel(params);
         return template.render(model);
     }
 
     private Map<String, Object> executeScript(String script, List<String> params) throws IOException {
         return (Map<String, Object>) new GroovyShell()
-                .parse(new File(scriptPath + File.separator + script))
+                .parse(new File(SCRIPT_PATH  + File.separator + script))
                 .invokeMethod("main", params.toArray());
     }
 
     private Map<String,Object> getResponseParamMap(RequestPattern requestPattern, HttpServletRequest request)
             throws InvalidScriptParameters, IOException {
-        log.info("Start response data retrieving");
         List<String> scriptParams = requestPattern
-                .getScriptParamPatterns(((TemplateResponse) requestPattern.getResponse()).getScriptParams())
+                .getScriptParamPatterns(this.scriptParams)
                 .stream()
                 .map(pattern -> pattern.getPatternValue(request))
                 .collect(Collectors.toList());
-        return executeScript(((TemplateResponse) requestPattern.getResponse()).getScript(), scriptParams);
+        return executeScript(script, scriptParams);
     }
 
     @Override
-    public String getBody(HttpServletRequest request) {
-        return null;
+    public String getBody(HttpServletRequest request, RequestPattern requestPattern) throws IOException, InvalidScriptParameters {
+        return buildBody(getResponseParamMap(requestPattern, request));
     }
 }

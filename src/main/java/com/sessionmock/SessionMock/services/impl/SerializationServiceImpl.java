@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import static com.sessionmock.SessionMock.model.constants.Constants.SCRIPT_PATH;
+import static com.sessionmock.SessionMock.model.constants.Constants.TEMPLATE_PATH;
+
 @Service
 @Slf4j
 public class SerializationServiceImpl implements SerializationService {
@@ -28,11 +31,9 @@ public class SerializationServiceImpl implements SerializationService {
   private String scenariosPath;
 
   @Value("${application.static.resources.templates}")
-  @Getter
   private String templatePath;
 
   @Value("${application.static.resources.scripts}")
-  @Getter
   private String scriptPath;
 
   private List<RequestPattern> requestPatterns;
@@ -46,10 +47,12 @@ public class SerializationServiceImpl implements SerializationService {
   }
 
   @PostConstruct
-
   private void init() {
     serializeAllRequestPatterns();
     serializeAllScenarios();
+    //ОЧЕНЬ ХУЕВО Я СГОРЮ ЗА ЭТО В АДУ
+    SCRIPT_PATH = scriptPath;
+    TEMPLATE_PATH = templatePath;
   }
 
   private void serializeAllScenarios() {
