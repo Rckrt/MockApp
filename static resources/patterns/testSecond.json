@@ -4,22 +4,20 @@
   "allPatterns": [
     { "@type" : "attr",
       "name" : "fa",
-      "valueRegex" : "\\d",
+      "value" : "\\d",
       "identifier" : true
     },
     { "@type" : "attr",
       "name" : "fb",
-      "valueRegex" : "\\d",
+      "value" : "\\d",
       "identifier" : true
     }],
   "response" : {
-    "@type" : "template",
+    "@type" : "text",
     "status" : "OK",
     "headerMap" : {
       "testHeader" : ["value"]
     },
-    "script" : "Main.groovy",
-    "scriptParams" : ["attr:fa"],
-    "template" : "test.twig"
+    "body" : "ПРИНЯТО"
   },
   "schema": {}}

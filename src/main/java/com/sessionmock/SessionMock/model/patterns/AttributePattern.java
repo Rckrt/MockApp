@@ -14,13 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 @EqualsAndHashCode(callSuper = true)
 public class AttributePattern extends Pattern{
 
-    private final PatternType patternType = PatternType.ATTRIBUTE;
-    protected String valueRegex;
+    private final static PatternType patternType = PatternType.ATTRIBUTE;
 
     @Override
-    public void isMatches(HttpServletRequest request) throws PatternValidationException {
-       if (!getPatternValue(request).matches(valueRegex))
-           throw new PatternValidationException(this, request.getHeader(name));
+    public boolean isMatches(HttpServletRequest request) throws PatternValidationException {
+       return getPatternValue(request).matches(value);
     }
 
     @Override

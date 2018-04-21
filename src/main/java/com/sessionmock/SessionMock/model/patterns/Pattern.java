@@ -22,9 +22,10 @@ public abstract class Pattern {
 
     protected PatternType patternType;
     protected String name;
+    protected String value;
     protected boolean identifier;
 
-    public abstract void isMatches(HttpServletRequest request) throws PatternValidationException;
+    public abstract boolean isMatches(HttpServletRequest request) throws PatternValidationException;
 
     @NonNull
     public abstract String getPatternValue(HttpServletRequest request);

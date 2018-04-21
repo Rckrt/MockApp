@@ -44,9 +44,8 @@ public class SingleController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "config/clear_all", method = RequestMethod.POST)
-    public ResponseEntity clearAll(
-            @RequestBody String prefix){
+    @RequestMapping(value = "config/clear_all", method = RequestMethod.DELETE)
+    public ResponseEntity clearAll(){
         sessionService.clearAllSessionAttributes();
         return new ResponseEntity(HttpStatus.OK);
     }

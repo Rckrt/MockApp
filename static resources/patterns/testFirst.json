@@ -1,15 +1,15 @@
-{"urlPattern" : "/test/asd",
+{"urlPattern" : "/test/(([a-zA-Z0-9]+$)*)/asd",
   "nickname" : "testFirst",
   "requestMethod": "GET",
   "allPatterns": [
     { "@type" : "attr",
       "name" : "fa",
-      "valueRegex" : "\\d",
+      "value" : "\\d",
       "identifier" : true
     },
     { "@type" : "attr",
       "name" : "fb",
-      "valueRegex" : "\\d",
+      "value" : "\\d",
       "identifier" : true
     }],
   "response" : {

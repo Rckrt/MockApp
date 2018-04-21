@@ -14,13 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 @EqualsAndHashCode(callSuper = true)
 public class HeaderPattern extends Pattern {
 
-    private final PatternType patternType = PatternType.HEADER;
-    protected String valueRegex;
+    private final static PatternType patternType = PatternType.HEADER;
 
     @Override
-    public void isMatches(HttpServletRequest request) throws PatternValidationException {
-        if(!getPatternValue(request).matches(valueRegex))
-            throw new PatternValidationException(this, request.getHeader(name));
+    public boolean isMatches(HttpServletRequest request) throws PatternValidationException {
+        return getPatternValue(request).matches(value);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class ValidationServiceImpl implements ValidationService {
             throws PatternValidationException {
         log.info("Validate request {} with pattern {}", request, requestPattern);
         for (Pattern pattern :requestPattern.getAllPatterns()) {
-            pattern.isMatches(request);
+            if(!pattern.isMatches(request)) throw new PatternValidationException(pattern, request);
         }
     }
 }

@@ -81,7 +81,7 @@ public class UrlResolver {
 
     private static UrlResolver findChildByKey(String key, UrlResolver current) throws UrlNotFoundException {
         return current.childes.stream()
-                .filter(ell -> ell.path.matches(key))
+                .filter(ell -> key.equals(ell.path))
                 .findFirst().orElseThrow(() -> new UrlNotFoundException(current.fullPath + key));
     }
 
