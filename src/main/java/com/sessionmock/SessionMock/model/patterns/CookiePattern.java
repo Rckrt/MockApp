@@ -1,7 +1,6 @@
 package com.sessionmock.SessionMock.model.patterns;
 
 import com.sessionmock.SessionMock.model.enums.PatternType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

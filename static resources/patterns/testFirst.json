@@ -1,4 +1,4 @@
-{"urlPattern" : "/test",
+{"urlPattern" : "/test/asd",
   "nickname" : "testFirst",
   "requestMethod": "GET",
   "allPatterns": [

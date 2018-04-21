@@ -25,7 +25,6 @@ public class RequestMappingServiceImpl implements RequestMappingService {
 
     private final Map<RequestPattern, List<RequestPattern>> requestPatternGraph = new HashMap<>();
     private final Map<String, List<RequestPattern>> urlMapping = new HashMap<>();
-    private final UrlResolver urlResolver = UrlResolver.ROOT;
     private final SerializationService serializationService;
 
     @Autowired
@@ -38,7 +37,7 @@ public class RequestMappingServiceImpl implements RequestMappingService {
     public RequestPattern findRequestPattern(HttpServletRequest request) throws RequestPatternNotFoundException, UrlNotFoundException {
         log.info("Pattern search began for request {}", request);
         return urlMapping
-            .get(urlResolver.findUrl(request.getRequestURI()))
+            .get(UrlResolver.findUrl(request.getRequestURI()))
             .stream()
             .filter(requestPattern -> requestPattern.getRequestMethod().toString().equals(request.getMethod()) &&
                     requestPattern.getAllPatterns()
@@ -53,14 +52,13 @@ public class RequestMappingServiceImpl implements RequestMappingService {
         return requestPatternGraph.get(requestPattern);
     }
 
-
     @PostConstruct
     private void init() {
         for (List<RequestPattern> scenario : serializationService.getScenariosList()) {
             RequestPattern previousPattern = scenario.get(0);
             addRequestPatternGraphVertex(previousPattern, null);
             for (int i = 1; i < scenario.size(); i++) {
-                urlResolver.addUrl(previousPattern.getUrlPattern());
+                UrlResolver.addUrl(previousPattern.getUrlPattern());
                 addRequestPatternGraphVertex(scenario.get(i), previousPattern);
                 previousPattern = scenario.get(i);
             }

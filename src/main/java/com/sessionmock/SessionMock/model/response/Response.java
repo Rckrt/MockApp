@@ -20,7 +20,7 @@ import java.util.List;
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="@type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = TemplateResponse.class, name = "template"),
-        @JsonSubTypes.Type(value = TemplateResponse.class, name = "plain")
+        @JsonSubTypes.Type(value = TextResponse.class, name = "text")
 })
 public abstract class Response {
     private HttpStatus status;

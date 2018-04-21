@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -84,8 +83,7 @@ public class SerializationServiceImpl implements SerializationService {
     return scenariosList;
   }
 
-  @Override
-  public RequestPattern findPatternByNickname(String nickname) {
+  private RequestPattern findPatternByNickname(String nickname) {
     return requestPatterns.stream()
             .filter(a -> a.getNickname().equals(nickname))
             .findFirst().get();

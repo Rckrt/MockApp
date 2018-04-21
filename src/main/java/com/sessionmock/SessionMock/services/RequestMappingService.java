@@ -14,5 +14,4 @@ public interface RequestMappingService {
     RequestPattern findRequestPattern(HttpServletRequest request) throws RequestPatternNotFoundException, UrlNotFoundException;
 
     List<RequestPattern> getInputRequestPatterns(RequestPattern requestPattern);
-
 }

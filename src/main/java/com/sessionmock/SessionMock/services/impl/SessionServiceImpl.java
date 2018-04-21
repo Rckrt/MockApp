@@ -1,6 +1,5 @@
 package com.sessionmock.SessionMock.services.impl;
 
-import com.sessionmock.SessionMock.exceptions.DefaultDataNotFound;
 import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +19,7 @@ import java.util.stream.Stream;
 public class SessionServiceImpl implements SessionService{
 
     private final RequestMappingService requestMappingService;
-    private Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes = new HashMap<>();
+    private final Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes = new HashMap<>();
 
 
     @Autowired
@@ -29,19 +27,14 @@ public class SessionServiceImpl implements SessionService{
         this.requestMappingService = requestMappingService;
     }
 
-    @PostConstruct
-    private void init(){}
-
     @Override
-    public void addToSession(RequestPattern requestPattern, HttpServletRequest request, String body) throws
-            DefaultDataNotFound, PreviousRequestNotExist {
+    public void addToSession(RequestPattern requestPattern, HttpServletRequest request) throws PreviousRequestNotExist {
         log.info("Start added request to session");
 
         List<Pattern> identifierPatterns = requestPattern.getIdentifierPatterns();
         Map<Pattern,String> currentIdentifierMap = buildPatternValueMap(identifierPatterns, request);
 
-        if (!isPreviousRequestExist(requestPattern, request, currentIdentifierMap, identifierPatterns))
-            throw new PreviousRequestNotExist(request);
+        checkPreviousRequestExistance(requestPattern, request, currentIdentifierMap, identifierPatterns);
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
     }
 
@@ -52,6 +45,12 @@ public class SessionServiceImpl implements SessionService{
                         pattern -> pattern, pattern -> pattern.getPatternValue(request)));
     }
 
+    @Override
+    public void clearAllSessionAttributes() {
+        sessionAttributes.clear();
+    }
+
+
 
     private List<RequestPattern> getPreviousPatterns(RequestPattern requestPattern, List<Pattern> patternsList ) {
         return requestMappingService
@@ -60,7 +59,7 @@ public class SessionServiceImpl implements SessionService{
                 .collect(Collectors.toList());
     }
 
-    private boolean isPreviousRequestExist(RequestPattern requestPattern, HttpServletRequest request,
+    private void checkPreviousRequestExistance(RequestPattern requestPattern, HttpServletRequest request,
                                           Map<Pattern,String> currentIdentifierMap, List<Pattern> patternsList)
             throws PreviousRequestNotExist {
         log.info("Check previous request existence for request {} and request pattern {}", request, requestPattern);
@@ -70,15 +69,13 @@ public class SessionServiceImpl implements SessionService{
                 sessionAttributes.remove(str
                             .filter(pattern -> sessionAttributes.get(pattern).contains(currentIdentifierMap))
                             .findFirst().get());
-                return true;
             }
             catch (Exception e){
                 log.error("Catch error - previous request not exist", e);
                 throw new PreviousRequestNotExist(request);
             }
         }
-            return true;
-        }
+    }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {
         if (currentIdentifierMap != null) {

@@ -34,7 +34,7 @@ public class TemplateResponse extends Response {
         return template.render(model);
     }
 
-    private Map<String, Object> executeScript(String script, List<String> params) throws IOException {
+    private static Map<String, Object> executeScript(String script, List<String> params) throws IOException {
         return (Map<String, Object>) new GroovyShell()
                 .parse(new File(SCRIPT_PATH  + File.separator + script))
                 .invokeMethod("main", params.toArray());

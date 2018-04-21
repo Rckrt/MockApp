@@ -5,7 +5,6 @@ import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.services.ValidationService;
 import java.io.IOException;
-import java.util.stream.Stream;
 
 import lombok.extern.slf4j.Slf4j;
 import org.everit.json.schema.Schema;
@@ -20,14 +19,13 @@ public class ValidationServiceImpl implements ValidationService {
 
     @Override
     public void validateRequest(HttpServletRequest request, RequestPattern requestPattern, Object body)
-            throws IOException, PatternValidationException {
+            throws PatternValidationException {
         log.info("Request validation started");
        validateRequestParameters(request, requestPattern);
        validateRequestBody(body, requestPattern);
     }
 
-    private void validateRequestBody(Object body, RequestPattern requestPattern)
-        throws IOException {
+    private void validateRequestBody(Object body, RequestPattern requestPattern) {
         log.info("Validate request body {} with pattern {}", body, requestPattern);
         if (requestPattern.getSchema() == null) return;
         Schema schema = SchemaLoader.load(requestPattern.getSchema());

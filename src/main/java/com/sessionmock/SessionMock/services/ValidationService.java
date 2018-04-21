@@ -12,5 +12,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface ValidationService {
 
     void validateRequest(HttpServletRequest request, RequestPattern requestPattern, Object body)
-            throws IOException, PatternValidationException;
+            throws PatternValidationException;
 }

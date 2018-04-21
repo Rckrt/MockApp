@@ -1,9 +1,15 @@
 application:
   static:
     resources:
-      patterns: ${PATTERNS_PATH}
-      scenarios: ${SCENARIOS_PATH}
-      scripts: ${SCRIPTS_PATH}
-      templates: ${TEMPLATES_PATH}
+      patterns: "/home/rt/Projects/MockApp/static resources/patterns"
+      scenarios: "/home/rt/Projects/MockApp/static resources/scenarios"
+      scripts: "/home/rt/Projects/MockApp/static resources/scripts"
+      templates: "/home/rt/Projects/MockApp/static resources/templates"
 server:
   port: 8080
+  compression:
+    enabled: true
+    min-response-size: 1
+  jetty:
+    acceptors: 2
+

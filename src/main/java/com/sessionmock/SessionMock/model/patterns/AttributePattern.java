@@ -5,7 +5,6 @@ import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.servlet.http.HttpServletRequest;
 
