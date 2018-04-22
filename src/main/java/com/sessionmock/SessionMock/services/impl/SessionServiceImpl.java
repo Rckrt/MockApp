@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -34,7 +33,7 @@ public class SessionServiceImpl implements SessionService{
         List<Pattern> identifierPatterns = requestPattern.getIdentifierPatterns();
         Map<Pattern,String> currentIdentifierMap = buildPatternValueMap(identifierPatterns, request);
 
-        checkPreviousRequestExistance(requestPattern, request, currentIdentifierMap, identifierPatterns);
+        checkPreviousRequestExistence(requestPattern, request, currentIdentifierMap, identifierPatterns);
         saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
     }
 
@@ -50,24 +49,16 @@ public class SessionServiceImpl implements SessionService{
         sessionAttributes.clear();
     }
 
-
-
-    private List<RequestPattern> getPreviousPatterns(RequestPattern requestPattern, List<Pattern> patternsList ) {
-        return requestMappingService
-                .getInputRequestPatterns(requestPattern).stream()
-                .filter(pattern -> pattern.isContainsIdentifier(patternsList))
-                .collect(Collectors.toList());
-    }
-
-    private void checkPreviousRequestExistance(RequestPattern requestPattern, HttpServletRequest request,
-                                          Map<Pattern,String> currentIdentifierMap, List<Pattern> patternsList)
+    private void checkPreviousRequestExistence(RequestPattern requestPattern, HttpServletRequest request,
+                                               Map<Pattern,String> currentIdentifierMap, List<Pattern> patternsList)
             throws PreviousRequestNotExist {
         log.info("Check previous request existence for request {} and request pattern {}", request, requestPattern);
         if (!requestPattern.isInitial()) {
-            List<RequestPattern> previousRequestPatterns = getPreviousPatterns(requestPattern, patternsList);
-            try (Stream<RequestPattern> str = previousRequestPatterns.stream()){
-                sessionAttributes.remove(str
-                            .filter(pattern -> isSessionContainsIdentifier(currentIdentifierMap, pattern))
+            try{
+               sessionAttributes.remove(requestMappingService
+                            .getInputRequestPatterns(requestPattern).stream()
+                            .filter(pattern -> pattern.isContainsIdentifier(patternsList)
+                                    && isSessionContainsIdentifier(currentIdentifierMap, pattern))
                             .findAny().get());
             }
             catch (Exception e){
@@ -78,7 +69,7 @@ public class SessionServiceImpl implements SessionService{
     }
 
     private boolean isSessionContainsIdentifier(Map<Pattern,String> map ,RequestPattern requestPattern ){
-        return sessionAttributes.get(requestPattern).contains(map);
+        return sessionAttributes.getOrDefault(requestPattern, Collections.EMPTY_LIST).contains(map);
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {

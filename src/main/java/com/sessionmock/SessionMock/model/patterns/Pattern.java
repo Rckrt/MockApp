@@ -3,10 +3,7 @@ package com.sessionmock.SessionMock.model.patterns;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sessionmock.SessionMock.exceptions.PatternValidationException;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
         @JsonSubTypes.Type(value = HeaderPattern.class, name = "header"),
         @JsonSubTypes.Type(value = CookiePattern.class, name = "cookie")
 })
+@EqualsAndHashCode(of = {"name","value"})
 public abstract class Pattern {
     @Getter
     protected String name;
