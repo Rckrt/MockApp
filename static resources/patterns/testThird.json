@@ -18,5 +18,5 @@
       "testHeader" : ["value"]
     },
     "body" : "ПРИНЯТО"
-  },
-  "schema": {}}
+  }
+}

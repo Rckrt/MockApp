@@ -1,5 +1,7 @@
 package com.sessionmock.SessionMock.model.patterns;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
 import com.sessionmock.SessionMock.model.response.Response;
 import lombok.Data;
@@ -11,7 +13,10 @@ import java.util.stream.Collectors;
 import com.sessionmock.SessionMock.model.enums.RequestType;
 
 import lombok.EqualsAndHashCode;
+import org.everit.json.schema.Schema;
+import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,7 +29,7 @@ public class RequestPattern {
     private RequestType requestMethod;
     private List<Pattern> allPatterns;
     private Response response;
-    private JSONObject schema;
+    private JsonNode schema;
     private boolean isInitial = false;
 
     public List<Pattern> getIdentifierPatterns() {

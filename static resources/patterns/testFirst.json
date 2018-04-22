@@ -20,5 +20,5 @@
     "script" : "test.groovy",
     "scriptParams" : ["attr:fa"],
     "template" : "test.twig"
-  },
-"schema": {}}
+  }
+}
