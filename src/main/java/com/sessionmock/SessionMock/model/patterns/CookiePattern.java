@@ -1,6 +1,5 @@
 package com.sessionmock.SessionMock.model.patterns;
 
-import com.sessionmock.SessionMock.model.enums.PatternType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,8 +13,6 @@ import java.util.Arrays;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CookiePattern extends Pattern {
-
-    private final static PatternType patternType = PatternType.COOKIE;
     private String domain;
     private String path;
 

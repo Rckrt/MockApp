@@ -11,6 +11,6 @@ public class PatternValidationException extends Exception{
 
     public PatternValidationException(Pattern pattern, HttpServletRequest request){
         super(pattern.getPatternValue(request) + " doesn't match pattern "
-                + pattern.getName() + " with pattern type " + pattern.getPatternType() );
+                + pattern.getName() + " with pattern type " + pattern.getClass().getName() );
     }
 }

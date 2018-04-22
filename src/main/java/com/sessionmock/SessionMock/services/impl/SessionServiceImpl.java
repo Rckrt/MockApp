@@ -67,14 +67,18 @@ public class SessionServiceImpl implements SessionService{
             List<RequestPattern> previousRequestPatterns = getPreviousPatterns(requestPattern, patternsList);
             try (Stream<RequestPattern> str = previousRequestPatterns.stream()){
                 sessionAttributes.remove(str
-                            .filter(pattern -> sessionAttributes.get(pattern).contains(currentIdentifierMap))
-                            .findFirst().get());
+                            .filter(pattern -> isSessionContainsIdentifier(currentIdentifierMap, pattern))
+                            .findAny().get());
             }
             catch (Exception e){
                 log.error("Catch error - previous request not exist", e);
                 throw new PreviousRequestNotExist(request);
             }
         }
+    }
+
+    private boolean isSessionContainsIdentifier(Map<Pattern,String> map ,RequestPattern requestPattern ){
+        return sessionAttributes.get(requestPattern).contains(map);
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {

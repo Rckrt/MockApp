@@ -10,11 +10,13 @@ import java.util.stream.Collectors;
 
 import com.sessionmock.SessionMock.model.enums.RequestType;
 
+import lombok.EqualsAndHashCode;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Data
+@EqualsAndHashCode(of = "nickname")
 public class RequestPattern {
 
     private String urlPattern;

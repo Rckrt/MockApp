@@ -1,5 +1,4 @@
-{"urlPattern" : "/test/(([a-zA-Z0-9]+$)*)/asd",
-  "nickname" : "testFirst",
+{"urlPattern" : "/test/\\w/asd",
   "requestMethod": "GET",
   "allPatterns": [
     { "@type" : "attr",

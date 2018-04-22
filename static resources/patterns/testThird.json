@@ -1,5 +1,5 @@
-{"urlPattern" : "/test",
-  "requestMethod": "POST",
+{"urlPattern" : "/test/asd/\\d/kek",
+  "requestMethod": "DELETE",
   "allPatterns": [
     { "@type" : "attr",
       "name" : "fa",
@@ -12,13 +12,11 @@
       "identifier" : true
     }],
   "response" : {
-    "@type" : "template",
+    "@type" : "text",
     "status" : "OK",
     "headerMap" : {
       "testHeader" : ["value"]
     },
-    "script" : "Main.groovy",
-    "scriptParams" : ["attr:fa", "attr:fb"],
-    "template" : "test.twig"
+    "body" : "ПРИНЯТО"
   },
   "schema": {}}
