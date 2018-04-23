@@ -3,9 +3,9 @@ package com.sessionmock.SessionMock.controller;
 import com.sessionmock.SessionMock.exceptions.*;
 import com.sessionmock.SessionMock.model.UrlResolver;
 import com.sessionmock.SessionMock.services.RequestService;
+import com.sessionmock.SessionMock.services.SessionService;
 import java.io.IOException;
 
-import com.sessionmock.SessionMock.services.SessionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
