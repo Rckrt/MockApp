@@ -32,9 +32,8 @@ public class ValidationService {
         log.info("Validate request body {} with pattern {}", body, requestPattern);
         if (requestPattern.getSchema() == null) return;
         Schema schema = SchemaLoader
-                .load(new JSONObject
-                        (new JSONTokener(objectMapper.writeValueAsString(requestPattern.getSchema()))));
-        schema.validate(body);
+                .load(buildJsonObject(objectMapper.writeValueAsString(requestPattern.getSchema())));
+        schema.validate(buildJsonObject(body.toString()));
     }
 
     private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern)
@@ -44,4 +43,10 @@ public class ValidationService {
             if(!pattern.isMatches(request)) throw new PatternValidationException(pattern, request);
         }
     }
+
+    private JSONObject buildJsonObject(String str){
+        return new JSONObject(new JSONTokener(str));
+    }
+
+
 }

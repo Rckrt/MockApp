@@ -1,10 +1,10 @@
 application:
   static:
     resources:
-      patterns: "d:\\other projects\\mockapp\\static resources\\patterns"
-      scenarios: "d:\\other projects\\mockapp\\static resources\\scenarios"
-      scripts: "d:\\other projects\\mockapp\\static resources\\scripts"
-      templates: "d:\\other projects\\mockapp\\static resources\\templates"
+      patterns: "/home/rt/Projects/MockApp/static resources/patterns"
+      scenarios: "/home/rt/Projects/MockApp/static resources/scenarios"
+      scripts: "/home/rt/Projects/MockApp/static resources/scripts"
+      templates: "/home/rt/Projects/MockApp/static resources/templates"
 server:
   port: 8080
   compression:
