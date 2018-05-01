@@ -85,7 +85,7 @@ public class SerializationService {
   private List<Set<RequestPattern>> getPatternSetListFromFile(File file) throws IOException {
     List<Set<RequestPattern>> patternSetList = new ArrayList<>();
     for (String line : Files.readAllLines(file.toPath())) {
-      patternSetList.add(parseScenario(line, new HashSet<>()));
+      patternSetList.add(parseScenario(line.trim(), new HashSet<>()));
     }
     patternSetList.get(0).forEach(pattern -> pattern.setInitial(true));
     return patternSetList;
@@ -101,7 +101,7 @@ public class SerializationService {
   }
 
   private Set<RequestPattern> parseScenario(String scenariosStr, Set<RequestPattern> levelSet) {
-    if (scenariosStr.contains(REQUEST_SET_DELIMETER))
+    if (scenariosStr.matches(WORD_WITH_SPACES_PATTERN))
       fillPatternsSet(scenariosStr, levelSet);
     else levelSet.add(findPattern(scenariosStr));
 
