@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,7 @@ public class SerializationService {
   @Value("${application.static.resources.scripts}")
   private String scriptPath;
 
-  private List<RequestPattern> requestPatterns = new ArrayList<>();
+  private final List<RequestPattern> requestPatterns = new ArrayList<>();
 
   private List<List<Set<RequestPattern>>> scenariosList;
 
@@ -81,8 +80,7 @@ public class SerializationService {
             .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
             .findFirst().get();
   }
-
-
+  
   private List<Set<RequestPattern>> getPatternSetListFromFile(File file) throws IOException {
     List<Set<RequestPattern>> patternSetList = new ArrayList<>();
     for (String line : Files.readAllLines(file.toPath())) {

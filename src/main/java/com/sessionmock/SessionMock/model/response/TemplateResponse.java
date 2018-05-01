@@ -2,7 +2,6 @@ package com.sessionmock.SessionMock.model.response;
 
 import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
-import groovy.lang.GroovyShell;
 import lombok.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.sessionmock.SessionMock.model.constants.Constants.SCRIPT_PATH;
 import static com.sessionmock.SessionMock.model.constants.Constants.TEMPLATE_PATH;
 import static com.sessionmock.SessionMock.services.ScriptExecutor.executeScript;
 

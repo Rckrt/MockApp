@@ -1,5 +1,9 @@
 {"urlPattern" : "/test",
   "requestMethod": "POST",
+  "validateScript": "validate.groovy",
+  "validateLinks" :{
+    "testFirst" : ["attr:fa"]
+  },
   "allPatterns": [
     { "@type" : "attr",
       "name" : "fa",

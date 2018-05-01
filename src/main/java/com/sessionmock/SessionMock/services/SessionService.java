@@ -37,9 +37,10 @@ public class SessionService {
         Map<Pattern,String> allPatternValuesMap = buildPatternValueMap(requestPattern.getAllPatterns(), request);
         Map<Pattern,String> currentIdentifierMap = buildPatternValueMap(requestPattern.getIdentifierPatterns(), request);
 
-        validateWithScript(request, requestPattern, currentIdentifierMap);
-
-        checkPreviousRequestExistence(requestPattern, request, currentIdentifierMap);
+        if (!requestPattern.isInitial()) {
+            validateWithScript(request, requestPattern, allPatternValuesMap);
+            checkPreviousRequestExistence(requestPattern, request, currentIdentifierMap);
+        }
         saveSessionAttributeIdentifier(requestPattern, allPatternValuesMap);
     }
 
@@ -83,18 +84,16 @@ public class SessionService {
                                                Map<Pattern,String> currentIdentifierMap)
             throws PreviousRequestNotExist {
         log.info("Check previous request existence for request {} and request pattern {}", request, requestPattern);
-        if (!requestPattern.isInitial()) {
-            try{
-               requestMappingService
-                    .getInputRequestPatterns(requestPattern).stream()
-                    .filter(pattern -> pattern.isContainsIdentifier(currentIdentifierMap.keySet())
-                            && isSessionContainsIdentifier(currentIdentifierMap, pattern))
-                    .findAny().get();
-            }
-            catch (Exception e){
-                log.error("Catch error - previous request not exist", e);
-                throw new PreviousRequestNotExist(request);
-            }
+        try{
+           requestMappingService
+                .getInputRequestPatterns(requestPattern).stream()
+                .filter(pattern -> pattern.isContainsIdentifier(currentIdentifierMap.keySet())
+                        && isSessionContainsIdentifier(currentIdentifierMap, pattern))
+                .findAny().get();
+        }
+        catch (Exception e){
+            log.error("Catch error - previous request not exist", e);
+            throw new PreviousRequestNotExist(request);
         }
     }
 
