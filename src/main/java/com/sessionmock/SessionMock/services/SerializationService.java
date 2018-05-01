@@ -50,6 +50,10 @@ public class SerializationService {
     TEMPLATE_PATH = templatePath;
   }
 
+  public List<List<Set<RequestPattern>>> getScenariosList() {
+    return scenariosList;
+  }
+
   private void serializeAllScenarios() throws IOException {
     List<List<Set<RequestPattern>>> list = new ArrayList<>();
     for (File file : getAllFiles(scenariosPath)) {
@@ -71,11 +75,8 @@ public class SerializationService {
     return (new File(path)).listFiles();
   }
 
-  public List<List<Set<RequestPattern>>> getScenariosList() {
-    return scenariosList;
-  }
 
-  private RequestPattern findPattern(String nickname) {
+  public RequestPattern findPattern(String nickname) {
     return requestPatterns.stream()
             .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
             .findFirst().get();

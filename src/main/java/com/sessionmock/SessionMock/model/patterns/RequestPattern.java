@@ -7,7 +7,9 @@ import com.sessionmock.SessionMock.model.response.Response;
 import lombok.Data;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sessionmock.SessionMock.model.enums.RequestType;
@@ -28,6 +30,8 @@ public class RequestPattern {
     private String nickname;
     private RequestType requestMethod;
     private List<Pattern> allPatterns;
+    private Map<String, List<String>> validateLinks;
+    private String validateScript;
     private Response response;
     private JsonNode schema;
     private boolean isInitial = false;
@@ -38,7 +42,6 @@ public class RequestPattern {
                 .collect(Collectors.toList());
     }
 
-    //TODO: implement logic
     public List<Pattern> getScriptParamPatterns(List<String> scriptParams) throws InvalidScriptParameters {
         List<Pattern> scriptParamPatterns = allPatterns.stream()
                     .filter(pattern ->  scriptParams.contains(pattern.buildScriptIdentifier()))
@@ -52,7 +55,7 @@ public class RequestPattern {
     }
 
     //TODO: maybe logic must be changed (equality)
-    public boolean isContainsIdentifier(List<Pattern> patterns){
+    public boolean isContainsIdentifier(Collection<Pattern> patterns){
         return allPatterns.containsAll(patterns);
     }
 

@@ -11,9 +11,18 @@ import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import static com.sessionmock.SessionMock.services.ScriptExecutor.executeValidateScript;
 
 @Service
 @Slf4j
@@ -22,7 +31,7 @@ public class ValidationService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void validateRequest(HttpServletRequest request, RequestPattern requestPattern, Object body)
-            throws PatternValidationException, JsonProcessingException {
+            throws PatternValidationException, IOException {
         log.info("Request validation started");
        validateRequestParameters(request, requestPattern);
        validateRequestBody(body, requestPattern);
@@ -47,6 +56,8 @@ public class ValidationService {
     private JSONObject buildJsonObject(String str){
         return new JSONObject(new JSONTokener(str));
     }
+
+
 
 
 }

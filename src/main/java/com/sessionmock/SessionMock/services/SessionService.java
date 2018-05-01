@@ -1,5 +1,6 @@
 package com.sessionmock.SessionMock.services;
 
+import com.sessionmock.SessionMock.exceptions.PatternValidationException;
 import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
@@ -8,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.sessionmock.SessionMock.services.ScriptExecutor.executeValidateScript;
 
 @Service
 @Slf4j
@@ -17,22 +21,52 @@ public class SessionService {
 
     private final RequestMappingService requestMappingService;
     private final Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes = new HashMap<>();
+    private final SerializationService serializationService;
 
 
     @Autowired
-    public SessionService(RequestMappingService requestMappingService) {
+    public SessionService(RequestMappingService requestMappingService, ValidationService validationService, SerializationService serializationService) {
         this.requestMappingService = requestMappingService;
+        this.serializationService = serializationService;
     }
 
-    public void addToSession(RequestPattern requestPattern, HttpServletRequest request) throws PreviousRequestNotExist {
+    public void addToSession(RequestPattern requestPattern, HttpServletRequest request)
+            throws PreviousRequestNotExist, IOException, PatternValidationException {
         log.info("Start added request to session");
 
-        List<Pattern> identifierPatterns = requestPattern.getIdentifierPatterns();
-        Map<Pattern,String> currentIdentifierMap = buildPatternValueMap(identifierPatterns, request);
+        Map<Pattern,String> allPatternValuesMap = buildPatternValueMap(requestPattern.getAllPatterns(), request);
+        Map<Pattern,String> currentIdentifierMap = buildPatternValueMap(requestPattern.getIdentifierPatterns(), request);
 
-        checkPreviousRequestExistence(requestPattern, request, currentIdentifierMap, identifierPatterns);
-        saveSessionAttributeIdentifier(requestPattern, currentIdentifierMap);
+        validateWithScript(request, requestPattern, currentIdentifierMap);
+
+        checkPreviousRequestExistence(requestPattern, request, currentIdentifierMap);
+        saveSessionAttributeIdentifier(requestPattern, allPatternValuesMap);
     }
+
+
+    private void validateWithScript(HttpServletRequest request, RequestPattern requestPattern, Map<Pattern,String> patternValueMap)
+            throws IOException, PatternValidationException {
+        Map<String, List<String>> patternListMap = new HashMap<>();
+
+        for (Map.Entry<String, List<String>> entry :requestPattern.getValidateLinks().entrySet()) {
+            RequestPattern linkedPattern = serializationService.findPattern(entry.getKey());
+            patternListMap.put(entry.getKey(), patternLinksToValues(entry.getValue(), linkedPattern, patternValueMap));
+        }
+
+        if (!executeValidateScript(requestPattern.getValidateScript(), patternListMap))
+            throw new PatternValidationException(requestPattern, request);
+    }
+
+    private List<String> patternLinksToValues(List<String> links, RequestPattern requestPattern, Map<Pattern,String> patternValueMap){
+        List<String> patternValues = new ArrayList<>();
+        Map<String, String> linkValueMap = findInSessionByIdentifier(patternValueMap, requestPattern)
+            .entrySet().stream()
+            .collect(Collectors.toMap(entry -> entry.getKey().buildScriptIdentifier(), Map.Entry::getValue));
+
+        for (String link : links) patternValues.add(linkValueMap.get(link));
+        return patternValues;
+    }
+
 
     private Map<Pattern,String> buildPatternValueMap(List<Pattern> patternList, HttpServletRequest request){
         return patternList
@@ -46,16 +80,16 @@ public class SessionService {
     }
 
     private void checkPreviousRequestExistence(RequestPattern requestPattern, HttpServletRequest request,
-                                               Map<Pattern,String> currentIdentifierMap, List<Pattern> patternsList)
+                                               Map<Pattern,String> currentIdentifierMap)
             throws PreviousRequestNotExist {
         log.info("Check previous request existence for request {} and request pattern {}", request, requestPattern);
         if (!requestPattern.isInitial()) {
             try{
-               sessionAttributes.remove(requestMappingService
-                            .getInputRequestPatterns(requestPattern).stream()
-                            .filter(pattern -> pattern.isContainsIdentifier(patternsList)
-                                    && isSessionContainsIdentifier(currentIdentifierMap, pattern))
-                            .findAny().get());
+               requestMappingService
+                    .getInputRequestPatterns(requestPattern).stream()
+                    .filter(pattern -> pattern.isContainsIdentifier(currentIdentifierMap.keySet())
+                            && isSessionContainsIdentifier(currentIdentifierMap, pattern))
+                    .findAny().get();
             }
             catch (Exception e){
                 log.error("Catch error - previous request not exist", e);
@@ -64,8 +98,17 @@ public class SessionService {
         }
     }
 
+    //custom exception
     private boolean isSessionContainsIdentifier(Map<Pattern,String> map ,RequestPattern requestPattern ){
-        return sessionAttributes.getOrDefault(requestPattern, Collections.EMPTY_LIST).contains(map);
+        return sessionAttributes.get(requestPattern).
+                stream().allMatch(entry -> entry.entrySet().containsAll(map.entrySet()));
+    }
+
+    private Map<Pattern, String> findInSessionByIdentifier(Map<Pattern,String> map ,RequestPattern requestPattern ){
+        return sessionAttributes.get(requestPattern).stream()
+                .filter(entry -> entry.entrySet()
+                .containsAll(map.entrySet()))
+                .findFirst().get();
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {

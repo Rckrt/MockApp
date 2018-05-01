@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.sessionmock.SessionMock.model.constants.Constants.SCRIPT_PATH;
 import static com.sessionmock.SessionMock.model.constants.Constants.TEMPLATE_PATH;
+import static com.sessionmock.SessionMock.services.ScriptExecutor.executeScript;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -32,12 +33,6 @@ public class TemplateResponse extends Response {
         JtwigTemplate template = JtwigTemplate.fileTemplate(TEMPLATE_PATH + File.separator + this.template);
         JtwigModel model = JtwigModel.newModel(params);
         return template.render(model);
-    }
-
-    private static Map<String, Object> executeScript(String script, List<String> params) throws IOException {
-        return (Map<String, Object>) new GroovyShell()
-                .parse(new File(SCRIPT_PATH  + File.separator + script))
-                .invokeMethod("main", params.toArray());
     }
 
     private Map<String,Object> getResponseParamMap(RequestPattern requestPattern, HttpServletRequest request)
