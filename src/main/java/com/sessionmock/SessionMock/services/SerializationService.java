@@ -6,9 +6,7 @@ import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
@@ -16,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.sessionmock.SessionMock.model.constants.Constants.JSON_EXTENSION;
-import static com.sessionmock.SessionMock.model.constants.Constants.SCRIPT_PATH;
-import static com.sessionmock.SessionMock.model.constants.Constants.TEMPLATE_PATH;
+import static com.sessionmock.SessionMock.model.constants.Constants.*;
 
 @Service
 @Slf4j
@@ -38,7 +34,7 @@ public class SerializationService {
 
   private List<RequestPattern> requestPatterns = new ArrayList<>();
 
-  private List<List<RequestPattern>> scenariosList;
+  private List<List<Set<RequestPattern>>> scenariosList;
 
   private final ObjectMapper objectMapper;
 
@@ -47,52 +43,52 @@ public class SerializationService {
   }
 
   @PostConstruct
-  private void init() throws SerializationException {
+  private void init() throws IOException {
     serializeAllRequestPatterns();
     serializeAllScenarios();
     SCRIPT_PATH = scriptPath;
     TEMPLATE_PATH = templatePath;
   }
 
-  private void serializeAllScenarios() {
-    this.scenariosList = Arrays.stream(getAllFiles(scenariosPath))
-        .map(this::getPatternListFromFile)
-        .collect(Collectors.toList());
-    this.scenariosList.forEach(list -> list.get(0).setInitial(true));
+  private void serializeAllScenarios() throws IOException {
+    List<List<Set<RequestPattern>>> list = new ArrayList<>();
+    for (File file : getAllFiles(scenariosPath)) {
+      List<Set<RequestPattern>> patternSetListFromFile = getPatternSetListFromFile(file);
+      list.add(patternSetListFromFile);
+    }
+    this.scenariosList = list;
   }
 
   private void serializeAllRequestPatterns() throws SerializationException {
-    for (File file :getAllFiles(requestPatternsPath)) {
+    for (File file : getAllFiles(requestPatternsPath)) {
       RequestPattern requestPattern = serializeClass(file, RequestPattern.class);
       requestPattern.setNickname(file.getName());
       requestPatterns.add(requestPattern);
     }
   }
 
-  private File[] getAllFiles(String path){
+  private File[] getAllFiles(String path) {
     return (new File(path)).listFiles();
   }
 
-  public List<List<RequestPattern>> getScenariosList() {
+  public List<List<Set<RequestPattern>>> getScenariosList() {
     return scenariosList;
   }
 
-  private RequestPattern findPatternByNickname(String nickname) {
+  private RequestPattern findPattern(String nickname) {
     return requestPatterns.stream()
             .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
             .findFirst().get();
   }
 
 
-  private List<RequestPattern> getPatternListFromFile(File file){
-    try {
-      return Files
-          .lines(file.toPath())
-          .map(this::findPatternByNickname)
-          .collect(Collectors.toList());
-    } catch (IOException ignored) {
-      throw new NullPointerException("No scenarios found");
+  private List<Set<RequestPattern>> getPatternSetListFromFile(File file) throws IOException {
+    List<Set<RequestPattern>> patternSetList = new ArrayList<>();
+    for (String line : Files.readAllLines(file.toPath())) {
+      patternSetList.add(parseScenario(line, new HashSet<>()));
     }
+    patternSetList.get(0).forEach(pattern -> pattern.setInitial(true));
+    return patternSetList;
   }
 
   private <T> T serializeClass(File file, Class<T> cls) throws SerializationException {
@@ -102,5 +98,18 @@ public class SerializationService {
       log.info("Serialization error {}", cause);
       throw new SerializationException(file, cls, cause);
     }
+  }
+
+  private Set<RequestPattern> parseScenario(String scenariosStr, Set<RequestPattern> levelSet) {
+    if (scenariosStr.contains(REQUEST_SET_DELIMETER))
+      fillPatternsSet(scenariosStr, levelSet);
+    else levelSet.add(findPattern(scenariosStr));
+
+    return levelSet;
+  }
+
+  private void fillPatternsSet(String scenariosStr, Set<RequestPattern> levelSet) {
+    for (String pattern : scenariosStr.split(REQUEST_SET_DELIMETER))
+      levelSet.add(findPattern(pattern.trim()));
   }
 }

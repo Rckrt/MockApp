@@ -1,10 +1,12 @@
 package com.sessionmock.SessionMock.model;
 
 import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.sessionmock.SessionMock.model.constants.Constants.PATH_DELIMITER;
 import static com.sessionmock.SessionMock.model.constants.Constants.URL_REGEX_PATTERN;
@@ -14,7 +16,9 @@ import static com.sessionmock.SessionMock.model.constants.Constants.URL_REGEX_PA
 public class UrlResolver {
     private static UrlResolver ROOT = new UrlResolver();
     private final String path;
+    @Getter
     private String fullPath;
+    @Getter
     private List<UrlResolver> childes;
 
     private UrlResolver(){
@@ -59,14 +63,18 @@ public class UrlResolver {
         }
     }
 
-    public static String findUrl(String url) throws UrlNotFoundException {
+    public static List<String> findUrl(String url) throws UrlNotFoundException {
         log.info("try to search url in tree {}", url);
-        UrlResolver current = ROOT;
+        List<UrlResolver> current = new ArrayList<>();
+        current.add(ROOT);
+
         for(String key : url.split(PATH_DELIMITER)) {
             if ("".equals(key)) continue;
             current = findChildByKey(key, current);
         }
-        return current.fullPath;
+        return current.stream()
+                .map(UrlResolver::getFullPath)
+                .collect(Collectors.toList());
     }
 
     private UrlResolver addChild(String key){
@@ -79,10 +87,10 @@ public class UrlResolver {
         return child;
     }
 
-    private static UrlResolver findChildByKey(String key, UrlResolver current) throws UrlNotFoundException {
-        return current.childes.stream()
+    private static List<UrlResolver> findChildByKey(String key, List<UrlResolver> current) throws UrlNotFoundException {
+        return current.stream().flatMap(resolver -> resolver.getChildes().stream())
                 .filter(ell -> key.matches(ell.path))
-                .findFirst().orElseThrow(() -> new UrlNotFoundException(current.fullPath + key));
+                .collect(Collectors.toList());
     }
 
     private UrlResolver findChildByKey(String key) {

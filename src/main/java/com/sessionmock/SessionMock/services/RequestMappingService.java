@@ -4,8 +4,8 @@ import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
 import com.sessionmock.SessionMock.exceptions.UrlNotFoundException;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.UrlResolver;
-import java.util.ArrayList;
-import java.util.HashMap;
+
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -33,9 +31,8 @@ public class RequestMappingService {
 
     public RequestPattern findRequestPattern(HttpServletRequest request) throws RequestPatternNotFoundException, UrlNotFoundException {
         log.info("Pattern search began for request {}", request);
-        return urlMapping
-            .get(UrlResolver.findUrl(request.getRequestURI()))
-            .stream()
+        return (UrlResolver.findUrl(request.getRequestURI())).stream()
+            .flatMap(url -> urlMapping.get(url).stream())
             .filter(requestPattern -> requestPattern.getRequestMethod().toString().equals(request.getMethod()) &&
                     requestPattern.getAllPatterns()
                             .stream()
@@ -50,16 +47,23 @@ public class RequestMappingService {
 
     @PostConstruct
     private void init() {
-        for (List<RequestPattern> scenario : serializationService.getScenariosList()) {
-            RequestPattern previousPattern = scenario.get(0);
-            addRequestPatternGraphVertex(previousPattern, null);
+        buildGraph();
+        buildUrlMapping();
+    }
+
+    private void buildGraph(){
+        for (List<Set<RequestPattern>> scenario : serializationService.getScenariosList()) {
+            Set<RequestPattern> previousPatterns = scenario.get(0);
+            addRequestPatternGraphVertex(previousPatterns, null);
+
             for (int i = 1; i < scenario.size(); i++) {
-                UrlResolver.addUrl(previousPattern.getUrlPattern());
-                addRequestPatternGraphVertex(scenario.get(i), previousPattern);
-                previousPattern = scenario.get(i);
+                for (RequestPattern previous : previousPatterns) {
+                    UrlResolver.addUrl(previous.getUrlPattern());
+                    addRequestPatternGraphVertex(scenario.get(i), previous);
+                    previousPatterns = scenario.get(i);
+                }
             }
         }
-        buildUrlMapping();
     }
 
 
@@ -71,7 +75,8 @@ public class RequestMappingService {
         urlMapping.computeIfAbsent(requestPattern.getUrlPattern(), k -> new ArrayList<>()).add(requestPattern);
     }
 
-    private void addRequestPatternGraphVertex(RequestPattern pattern, RequestPattern previous){
-        requestPatternGraph.computeIfAbsent(pattern, k -> new ArrayList<>()).add(previous);
+    private void addRequestPatternGraphVertex(Set<RequestPattern> patterns, RequestPattern previous){
+        for (RequestPattern pattern : patterns) requestPatternGraph
+                .computeIfAbsent(pattern, k -> new ArrayList<>()).add(previous);
     }
 }
