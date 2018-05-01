@@ -1,4 +1,4 @@
-{"urlPattern" : "/test/\\w/asd",
+{"urlPattern" : "/test/\\w+/asd",
   "requestMethod": "GET",
   "allPatterns": [
     { "@type" : "attr",
