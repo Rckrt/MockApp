@@ -1,10 +1,10 @@
 application:
   static:
     resources:
-      patterns: "/home/rt/Projects/MockApp/static resources/patterns"
-      scenarios: "/home/rt/Projects/MockApp/static resources/scenarios"
-      scripts: "/home/rt/Projects/MockApp/static resources/scripts"
-      templates: "/home/rt/Projects/MockApp/static resources/templates"
+      patterns: "/home/rt/projects/MockApp/static resources/patterns"
+      scenarios: "/home/rt/projects/MockApp/static resources/scenarios"
+      scripts: "/home/rt/projects/MockApp/static resources/scripts"
+      templates: "/home/rt/projects/MockApp/static resources/templates"
 server:
   port: 8080
   compression:

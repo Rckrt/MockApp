@@ -2,9 +2,11 @@ package com.sessionmock.SessionMock.model.response;
 
 import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
+import com.sessionmock.SessionMock.services.ScriptService;
 import lombok.*;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -14,7 +16,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.sessionmock.SessionMock.model.constants.Constants.TEMPLATE_PATH;
-import static com.sessionmock.SessionMock.services.ScriptExecutor.executeScript;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -25,6 +26,8 @@ public class TemplateResponse extends Response {
     private String template;
     private String script;
     private List<String> scriptParams;
+    @Autowired
+    private static ScriptService scriptService;
 
 
     private String buildBody(Map<String, Object> params){
@@ -40,7 +43,7 @@ public class TemplateResponse extends Response {
                 .stream()
                 .map(pattern -> pattern.getPatternValue(request))
                 .collect(Collectors.toList());
-        return executeScript(script, scriptParams);
+        return scriptService.executeScript(script, scriptParams);
     }
 
     @Override

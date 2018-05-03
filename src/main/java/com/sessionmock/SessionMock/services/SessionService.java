@@ -13,20 +13,20 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.sessionmock.SessionMock.services.ScriptExecutor.executeValidateScript;
-
 @Service
 @Slf4j
 public class SessionService {
 
     private final RequestMappingService requestMappingService;
     private final Map<RequestPattern, List<Map<Pattern,String>>> sessionAttributes = new HashMap<>();
+    private final ScriptService scriptService;
     private final SerializationService serializationService;
 
 
     @Autowired
-    public SessionService(RequestMappingService requestMappingService, ValidationService validationService, SerializationService serializationService) {
+    public SessionService(RequestMappingService requestMappingService, ValidationService validationService, ScriptService scriptService, SerializationService serializationService) {
         this.requestMappingService = requestMappingService;
+        this.scriptService = scriptService;
         this.serializationService = serializationService;
     }
 
@@ -54,7 +54,7 @@ public class SessionService {
             patternListMap.put(entry.getKey(), patternLinksToValues(entry.getValue(), linkedPattern, patternValueMap));
         }
 
-        if (!executeValidateScript(requestPattern.getValidateScript(), patternListMap))
+        if (!scriptService.executeValidateScript(requestPattern.getValidateScript(), patternListMap))
             throw new PatternValidationException(requestPattern, request);
     }
 
