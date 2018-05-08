@@ -12,4 +12,8 @@ public class RequestPatternNotFoundException extends Exception  {
         super("Request pattern not found for " + request.getRequestURI()
                 + " with method " + request.getMethod());
     }
+
+    public RequestPatternNotFoundException(String message) {
+        super(message);
+    }
 }

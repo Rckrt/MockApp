@@ -1,6 +1,7 @@
 package com.sessionmock.SessionMock.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
 import com.sessionmock.SessionMock.exceptions.SerializationException;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import java.io.File;
@@ -42,7 +43,7 @@ public class SerializationService {
   }
 
   @PostConstruct
-  private void init() throws IOException {
+  private void init() throws IOException, RequestPatternNotFoundException {
     serializeAllRequestPatterns();
     serializeAllScenarios();
     SCRIPT_PATH = scriptPath;
@@ -53,7 +54,35 @@ public class SerializationService {
     return scenariosList;
   }
 
-  private void serializeAllScenarios() throws IOException {
+  public RequestPattern findPattern(String nickname) throws RequestPatternNotFoundException {
+    return requestPatterns.stream()
+            .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
+            .findFirst().orElseThrow(() -> new RequestPatternNotFoundException(nickname));
+  }
+
+  private List<Set<RequestPattern>> getPatternSetListFromFile(File file) throws IOException, RequestPatternNotFoundException {
+    List<Set<RequestPattern>> patternSetList = new ArrayList<>();
+    for (String line : Files.readAllLines(file.toPath())) {
+      patternSetList.add(parseScenario(line.trim(), new HashSet<>()));
+    }
+    patternSetList.get(0).forEach(pattern -> pattern.setInitial(true));
+    return patternSetList;
+  }
+
+  private Set<RequestPattern> parseScenario(String scenariosStr, Set<RequestPattern> levelSet) throws RequestPatternNotFoundException {
+    if (scenariosStr.matches(WORD_WITH_SPACES_PATTERN))
+      fillPatternsSet(scenariosStr, levelSet);
+    else levelSet.add(findPattern(scenariosStr));
+
+    return levelSet;
+  }
+
+  private void fillPatternsSet(String scenariosStr, Set<RequestPattern> levelSet) throws RequestPatternNotFoundException {
+    for (String pattern : scenariosStr.split(REQUEST_SET_DELIMETER))
+      levelSet.add(findPattern(pattern.trim()));
+  }
+
+  private void serializeAllScenarios() throws IOException, RequestPatternNotFoundException {
     List<List<Set<RequestPattern>>> list = new ArrayList<>();
     for (File file : getAllFiles(scenariosPath)) {
       List<Set<RequestPattern>> patternSetListFromFile = getPatternSetListFromFile(file);
@@ -61,33 +90,12 @@ public class SerializationService {
     }
     this.scenariosList = list;
   }
-
   private void serializeAllRequestPatterns() throws SerializationException {
     for (File file : getAllFiles(requestPatternsPath)) {
       RequestPattern requestPattern = serializeClass(file, RequestPattern.class);
       requestPattern.setNickname(file.getName());
       requestPatterns.add(requestPattern);
     }
-  }
-
-  private File[] getAllFiles(String path) {
-    return (new File(path)).listFiles();
-  }
-
-
-  public RequestPattern findPattern(String nickname) {
-    return requestPatterns.stream()
-            .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
-            .findFirst().get();
-  }
-  
-  private List<Set<RequestPattern>> getPatternSetListFromFile(File file) throws IOException {
-    List<Set<RequestPattern>> patternSetList = new ArrayList<>();
-    for (String line : Files.readAllLines(file.toPath())) {
-      patternSetList.add(parseScenario(line.trim(), new HashSet<>()));
-    }
-    patternSetList.get(0).forEach(pattern -> pattern.setInitial(true));
-    return patternSetList;
   }
 
   private <T> T serializeClass(File file, Class<T> cls) throws SerializationException {
@@ -99,16 +107,7 @@ public class SerializationService {
     }
   }
 
-  private Set<RequestPattern> parseScenario(String scenariosStr, Set<RequestPattern> levelSet) {
-    if (scenariosStr.matches(WORD_WITH_SPACES_PATTERN))
-      fillPatternsSet(scenariosStr, levelSet);
-    else levelSet.add(findPattern(scenariosStr));
-
-    return levelSet;
-  }
-
-  private void fillPatternsSet(String scenariosStr, Set<RequestPattern> levelSet) {
-    for (String pattern : scenariosStr.split(REQUEST_SET_DELIMETER))
-      levelSet.add(findPattern(pattern.trim()));
+  private File[] getAllFiles(String path) {
+    return (new File(path)).listFiles();
   }
 }
