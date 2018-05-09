@@ -66,7 +66,6 @@ public class RequestMappingService {
         }
     }
 
-
     private void buildUrlMapping() {
         requestPatternGraph.keySet().forEach(this::addKeyMappingEntry);
     }

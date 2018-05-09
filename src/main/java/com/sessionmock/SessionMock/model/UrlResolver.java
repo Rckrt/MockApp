@@ -89,7 +89,7 @@ public class UrlResolver {
 
     private static List<UrlResolver> findChildByKey(String key, List<UrlResolver> current) throws UrlNotFoundException {
         return current.stream().flatMap(resolver -> resolver.getChildes().stream())
-                .filter(ell -> key.matches(ell.path))
+                .filter(ell -> key.equals(ell.path) || key.matches(ell.path))
                 .collect(Collectors.toList());
     }
 

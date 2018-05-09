@@ -2,6 +2,7 @@ package com.sessionmock.SessionMock.services;
 
 import com.sessionmock.SessionMock.exceptions.PatternValidationException;
 import com.sessionmock.SessionMock.exceptions.PreviousRequestNotExist;
+import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
 import com.sessionmock.SessionMock.model.patterns.Pattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class SessionService {
     }
 
     public void addToSession(RequestPattern requestPattern, HttpServletRequest request)
-            throws PreviousRequestNotExist, IOException, PatternValidationException {
+            throws PreviousRequestNotExist, IOException, PatternValidationException, RequestPatternNotFoundException {
         log.info("Start added request to session");
 
         Map<Pattern,String> allPatternValuesMap = buildPatternValueMap(requestPattern.getAllPatterns(), request);
@@ -46,7 +47,7 @@ public class SessionService {
 
 
     private void validateWithScript(HttpServletRequest request, RequestPattern requestPattern, Map<Pattern,String> patternValueMap)
-            throws IOException, PatternValidationException {
+            throws IOException, PatternValidationException, RequestPatternNotFoundException {
         Map<String, List<String>> patternListMap = new HashMap<>();
 
         for (Map.Entry<String, List<String>> entry :requestPattern.getValidateLinks().entrySet()) {

@@ -54,13 +54,8 @@ public class SerializationService {
     return scenariosList;
   }
 
-  public RequestPattern findPattern(String nickname) throws RequestPatternNotFoundException {
-    return requestPatterns.stream()
-            .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
-            .findFirst().orElseThrow(() -> new RequestPatternNotFoundException(nickname));
-  }
-
-  private List<Set<RequestPattern>> getPatternSetListFromFile(File file) throws IOException, RequestPatternNotFoundException {
+  private List<Set<RequestPattern>> getPatternSetListFromFile(File file)
+          throws IOException, RequestPatternNotFoundException {
     List<Set<RequestPattern>> patternSetList = new ArrayList<>();
     for (String line : Files.readAllLines(file.toPath())) {
       patternSetList.add(parseScenario(line.trim(), new HashSet<>()));
@@ -69,7 +64,14 @@ public class SerializationService {
     return patternSetList;
   }
 
-  private Set<RequestPattern> parseScenario(String scenariosStr, Set<RequestPattern> levelSet) throws RequestPatternNotFoundException {
+  public RequestPattern findPattern(String nickname) throws RequestPatternNotFoundException {
+    return requestPatterns.stream()
+            .filter(a -> a.getNickname().equals(nickname + JSON_EXTENSION))
+            .findFirst().orElseThrow(() -> new RequestPatternNotFoundException(nickname));
+  }
+
+  private Set<RequestPattern> parseScenario(String scenariosStr, Set<RequestPattern> levelSet)
+          throws RequestPatternNotFoundException {
     if (scenariosStr.matches(WORD_WITH_SPACES_PATTERN))
       fillPatternsSet(scenariosStr, levelSet);
     else levelSet.add(findPattern(scenariosStr));
@@ -77,7 +79,8 @@ public class SerializationService {
     return levelSet;
   }
 
-  private void fillPatternsSet(String scenariosStr, Set<RequestPattern> levelSet) throws RequestPatternNotFoundException {
+  private void fillPatternsSet(String scenariosStr, Set<RequestPattern> levelSet)
+          throws RequestPatternNotFoundException {
     for (String pattern : scenariosStr.split(REQUEST_SET_DELIMETER))
       levelSet.add(findPattern(pattern.trim()));
   }
