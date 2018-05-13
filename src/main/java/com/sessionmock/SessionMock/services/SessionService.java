@@ -25,7 +25,7 @@ public class SessionService {
 
 
     @Autowired
-    public SessionService(RequestMappingService requestMappingService, ValidationService validationService, ScriptService scriptService, SerializationService serializationService) {
+    public SessionService(RequestMappingService requestMappingService, ScriptService scriptService, SerializationService serializationService) {
         this.requestMappingService = requestMappingService;
         this.scriptService = scriptService;
         this.serializationService = serializationService;
