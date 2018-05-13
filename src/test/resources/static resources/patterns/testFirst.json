@@ -1,0 +1,24 @@
+{"urlPattern" : "/test/\\w+/asd",
+  "requestMethod": "GET",
+  "allPatterns": [
+    { "@type" : "attr",
+      "name" : "fa",
+      "value" : "\\d",
+      "identifier" : true
+    },
+    { "@type" : "attr",
+      "name" : "fb",
+      "value" : "\\d",
+      "identifier" : true
+    }],
+  "response" : {
+    "@type" : "template",
+    "status" : "OK",
+    "headerMap" : {
+      "testHeader" : ["value"]
+    },
+    "script" : "test.groovy",
+    "scriptParams" : ["attr:fa"],
+    "template" : "test.twig"
+  }
+}

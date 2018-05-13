@@ -40,9 +40,10 @@ public class ValidationService {
     private void validateRequestParameters(HttpServletRequest request, RequestPattern requestPattern)
             throws PatternValidationException {
         log.info("Validate request {} with pattern {}", request, requestPattern);
-        for (Pattern pattern :requestPattern.getAllPatterns()) {
-            if(!pattern.isMatches(request)) throw new PatternValidationException(pattern, request);
-        }
+        if (requestPattern.getAllPatterns() != null)
+            for (Pattern pattern : requestPattern.getAllPatterns()) {
+                if(!pattern.isMatches(request)) throw new PatternValidationException(pattern, request);
+            }
     }
 
     private JSONObject buildJsonObject(String str){

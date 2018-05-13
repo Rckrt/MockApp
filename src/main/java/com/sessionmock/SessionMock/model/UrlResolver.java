@@ -51,7 +51,7 @@ public class UrlResolver {
     //TODO throw custom exception
     private static void validateRelativeUrl(String url){
         if (!url.matches(URL_REGEX_PATTERN))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Prefix must be valid URL path");
 
     }
 

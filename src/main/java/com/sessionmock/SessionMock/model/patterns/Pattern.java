@@ -8,6 +8,7 @@ import lombok.*;
 import javax.servlet.http.HttpServletRequest;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="@type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = AttributePattern.class, name = "attr"),
@@ -17,8 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 @EqualsAndHashCode(of = {"name","value"})
 public abstract class Pattern {
     @Getter
+    @NonNull
     protected String name;
     @Getter
+    @NonNull
     protected String value;
     @Getter
     protected boolean identifier;
