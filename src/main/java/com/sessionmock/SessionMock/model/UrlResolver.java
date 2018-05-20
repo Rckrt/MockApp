@@ -19,10 +19,10 @@ public class UrlResolver {
     @Getter
     private String fullPath;
     @Getter
-    private List<UrlResolver> childes;
+    private List<UrlResolver> children;
 
     private UrlResolver(){
-        this.childes = new ArrayList<>();
+        this.children = new ArrayList<>();
         this.fullPath = "";
         this.path = "";
     }
@@ -30,23 +30,30 @@ public class UrlResolver {
     private UrlResolver(String key, String fullPath) {
         this.path = key;
         this.fullPath = fullPath;
-        this.childes = new ArrayList<>();
+        this.children = new ArrayList<>();
     }
 
     public static void setPrefix(String prefix){
         validateRelativeUrl(prefix);
         UrlResolver newResolver = new UrlResolver();
-        List<UrlResolver> oldRootChildes = ROOT.childes;
+        List<UrlResolver> oldRootChildren = ROOT.children;
         ROOT = newResolver;
         for(String key : prefix.split(PATH_DELIMITER)) {
             if ("".equals(key)) continue;
-            String fullPath = PATH_DELIMITER + newResolver.fullPath + key;
             newResolver = newResolver.addChild(key);
-            newResolver.fullPath = fullPath;
         }
-        newResolver.childes = oldRootChildes;
+        newResolver.children = oldRootChildren;
     }
 
+    private UrlResolver addChild(String key){
+        UrlResolver child = findChildByKey(key);
+        if (child == null){
+            String fullPath = this.fullPath + PATH_DELIMITER + key;
+            child = new UrlResolver(key, fullPath);
+            children.add(child);
+        }
+        return child;
+    }
 
     //TODO throw custom exception
     private static void validateRelativeUrl(String url){
@@ -77,24 +84,14 @@ public class UrlResolver {
                 .collect(Collectors.toList());
     }
 
-    private UrlResolver addChild(String key){
-        UrlResolver child = findChildByKey(key);
-       if (child == null){
-           String fullPath = this.fullPath + PATH_DELIMITER + key;
-           child = new UrlResolver(key, fullPath);
-           childes.add(child);
-       }
-        return child;
-    }
-
     private static List<UrlResolver> findChildByKey(String key, List<UrlResolver> current) throws UrlNotFoundException {
-        return current.stream().flatMap(resolver -> resolver.getChildes().stream())
+        return current.stream().flatMap(resolver -> resolver.getChildren().stream())
                 .filter(ell -> key.equals(ell.path) || key.matches(ell.path))
                 .collect(Collectors.toList());
     }
 
     private UrlResolver findChildByKey(String key) {
-        return childes.stream()
+        return children.stream()
                 .filter(ell -> key.equals(ell.path))
                 .findFirst().orElse(null);
     }

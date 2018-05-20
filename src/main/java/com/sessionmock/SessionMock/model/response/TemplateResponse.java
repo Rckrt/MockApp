@@ -26,8 +26,7 @@ public class TemplateResponse extends Response {
     private String template;
     private String script;
     private List<String> scriptParams;
-    @Autowired
-    private static ScriptService scriptService;
+    private static final ScriptService scriptService = new ScriptService();
 
 
     private String buildBody(Map<String, Object> params){
