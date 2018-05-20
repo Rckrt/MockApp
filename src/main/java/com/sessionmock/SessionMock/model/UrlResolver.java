@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.sessionmock.SessionMock.model.constants.Constants.PATH_DELIMITER;
@@ -19,10 +21,10 @@ public class UrlResolver {
     @Getter
     private String fullPath;
     @Getter
-    private List<UrlResolver> children;
+    private Set<UrlResolver> children;
 
     private UrlResolver(){
-        this.children = new ArrayList<>();
+        this.children = new HashSet<>();
         this.fullPath = "";
         this.path = "";
     }
@@ -30,13 +32,13 @@ public class UrlResolver {
     private UrlResolver(String key, String fullPath) {
         this.path = key;
         this.fullPath = fullPath;
-        this.children = new ArrayList<>();
+        this.children = new HashSet<>();
     }
 
     public static void setPrefix(String prefix){
         validateRelativeUrl(prefix);
         UrlResolver newResolver = new UrlResolver();
-        List<UrlResolver> oldRootChildren = ROOT.children;
+        Set<UrlResolver> oldRootChildren = ROOT.children;
         ROOT = newResolver;
         for(String key : prefix.split(PATH_DELIMITER)) {
             if ("".equals(key)) continue;
