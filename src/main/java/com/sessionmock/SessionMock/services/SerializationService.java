@@ -34,7 +34,7 @@ public class SerializationService {
 
   private final List<RequestPattern> requestPatterns = new ArrayList<>();
 
-  private List<List<Set<RequestPattern>>> scenariosList;
+  private final List<List<Set<RequestPattern>>> scenariosList = new ArrayList<>();;
 
   private final ObjectMapper objectMapper;
 
@@ -46,7 +46,7 @@ public class SerializationService {
   private void init() throws IOException, RequestPatternNotFoundException {
     serializeAllRequestPatterns();
     serializeAllScenarios();
-    SCRIPT_PATH = scriptPath;
+    SCRIPT_PATH =  scriptPath;
     TEMPLATE_PATH = templatePath;
   }
 
@@ -86,12 +86,10 @@ public class SerializationService {
   }
 
   private void serializeAllScenarios() throws IOException, RequestPatternNotFoundException {
-    List<List<Set<RequestPattern>>> list = new ArrayList<>();
     for (File file : getAllFiles(scenariosPath)) {
       List<Set<RequestPattern>> patternSetListFromFile = getPatternSetListFromFile(file);
-      list.add(patternSetListFromFile);
+      scenariosList.add(patternSetListFromFile);
     }
-    this.scenariosList = list;
   }
   private void serializeAllRequestPatterns() throws SerializationException {
     for (File file : getAllFiles(requestPatternsPath)) {

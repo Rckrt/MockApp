@@ -1,5 +1,6 @@
 package com.sessionmock.SessionMock.model.patterns;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,12 @@ public class CookiePattern extends Pattern {
     private String domain;
     private String path;
 
+    public CookiePattern(String name, String value, boolean isInitial, String domain, String path ){
+        super(name, value, isInitial);
+        this.domain = domain;
+        this.path = path;
+    }
+
     @Override
     public boolean isMatches(HttpServletRequest request) {
        return Arrays.stream(request.getCookies()).anyMatch(this::isCookieMatchPattern);
@@ -27,8 +34,10 @@ public class CookiePattern extends Pattern {
     }
 
     private boolean isCookieMatchPattern(Cookie cookie){
-        return name.equals(cookie.getName()) && cookie.getValue().matches(value)
-                && cookie.getDomain().matches(domain) && cookie.getPath().matches(path);
+        return name.matches(cookie.getName())
+                && value.matches(cookie.getValue())
+                && (domain == null ? cookie.getDomain() == null : domain.matches(cookie.getDomain()))
+                && (path == null ? cookie.getPath() == null : path.matches(cookie.getPath()));
     }
 
     @Override

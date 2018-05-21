@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 @EqualsAndHashCode(callSuper = true)
 public class AttributePattern extends Pattern{
 
+    public AttributePattern(String name, String value, boolean isInitial){
+        super(name, value, isInitial);
+    }
+
     @Override
     public boolean isMatches(HttpServletRequest request) throws PatternValidationException {
        return getPatternValue(request).matches(value);

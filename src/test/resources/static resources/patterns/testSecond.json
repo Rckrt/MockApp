@@ -1,0 +1,47 @@
+{"urlPattern" : "/test",
+  "requestMethod": "POST",
+  "validateScript": "validate.groovy",
+  "validateLinks" :{
+    "testFirst" : ["attr:fa"]
+  },
+  "allPatterns": [
+    { "@type" : "attr",
+      "name" : "fa",
+      "value" : "\\d",
+      "identifier" : true
+    },
+    { "@type" : "attr",
+      "name" : "fb",
+      "value" : "\\d",
+      "identifier" : true
+    }],
+  "response" : {
+    "@type" : "template",
+    "status" : "OK",
+    "headerMap" : {
+      "testHeader" : ["value"]
+    },
+    "script" : "Main.groovy",
+    "scriptParams" : ["attr:fa", "attr:fb"],
+    "template" : "test.twig"
+  },
+  "schema": {
+    "type" : "object",
+    "properties" : {
+      "rectangle" : {"$ref" : "#/definitions/Rectangle" }
+    },
+    "definitions" : {
+      "size" : {
+        "type" : "number",
+        "minimum" : 0
+      },
+      "Rectangle" : {
+        "type" : "object",
+        "properties" : {
+          "a" : {"$ref" : "#/definitions/size"},
+          "b" : {"$ref" : "#/definitions/size"}
+        }
+      }
+    }
+  }
+}

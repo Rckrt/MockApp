@@ -37,11 +37,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jetty</artifactId>
 			<version>2.0.1.RELEASE</version>
 		</dependency>
@@ -77,6 +72,18 @@
 			<groupId>org.jtwig</groupId>
 			<artifactId>jtwig-spring-boot-starter</artifactId>
 			<version>5.87.0.RELEASE</version>
+		</dependency>
+		<!-- TESTS -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

@@ -1,0 +1,22 @@
+{"urlPattern" : "/test/asd/\\d/kek",
+  "requestMethod": "DELETE",
+  "allPatterns": [
+    { "@type" : "attr",
+      "name" : "fa",
+      "value" : "\\d",
+      "identifier" : true
+    },
+    { "@type" : "attr",
+      "name" : "fb",
+      "value" : "\\d",
+      "identifier" : true
+    }],
+  "response" : {
+    "@type" : "text",
+    "status" : "OK",
+    "headerMap" : {
+      "testHeader" : ["value"]
+    },
+    "body" : "ПРИНЯТО"
+  }
+}
