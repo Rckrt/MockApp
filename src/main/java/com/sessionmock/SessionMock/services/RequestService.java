@@ -1,6 +1,7 @@
 package com.sessionmock.SessionMock.services;
 
 import com.sessionmock.SessionMock.exceptions.*;
+import com.sessionmock.SessionMock.model.patterns.CookiePattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.response.Response;
 
@@ -14,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 @Slf4j
@@ -29,12 +31,13 @@ public class RequestService {
         this.requestMappingService = requestMappingService;
     }
 
-    public Object execute(HttpServletRequest request, String body) throws RequestPatternNotFoundException, IOException,
+    public Object execute(HttpServletRequest request, HttpServletResponse response, String body) throws RequestPatternNotFoundException, IOException,
             UrlNotFoundException, PreviousRequestNotExist, PatternValidationException, InvalidScriptParameters {
         log.info("Start execute request {} with body {}", request, body);
         RequestPattern requestPattern = requestMappingService.findRequestPattern(request);
         validationService.validateRequest(request, requestPattern, body);
         sessionService.addToSession(requestPattern, request);
+        setCookiesFromPattern(response, requestPattern);
         return buildResponseEntity(requestPattern, request);
     }
 
@@ -45,6 +48,11 @@ public class RequestService {
         headerMap.putAll(response.getHeaderMap());
         String body = requestPattern.buildBody(request);
         return new ResponseEntity<>(body, headerMap, response.getStatus());
+    }
+
+    private void setCookiesFromPattern(HttpServletResponse response, RequestPattern requestPattern){
+        requestPattern.getResponse().getCookies()
+                .forEach((key, value) -> response.addCookie(new Cookie(key, value)));
     }
 }
 

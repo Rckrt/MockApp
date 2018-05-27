@@ -1,6 +1,5 @@
 package com.sessionmock.SessionMock.model.patterns;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,6 +20,10 @@ public class CookiePattern extends Pattern {
         super(name, value, isInitial);
         this.domain = domain;
         this.path = path;
+    }
+
+    public CookiePattern(String name, String value){
+        super(name, value, false);
     }
 
     @Override

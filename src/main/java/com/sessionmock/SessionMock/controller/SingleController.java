@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController("/")
 @Slf4j
@@ -29,12 +30,12 @@ public class SingleController {
 
     @RequestMapping("**")
     public Object getAllRequests(
-        HttpServletRequest request,
+        HttpServletRequest request, HttpServletResponse response,
         @RequestBody(required = false) String body) throws
             RequestPatternNotFoundException, PatternValidationException, PreviousRequestNotExist,
             UrlNotFoundException, IOException, InvalidScriptParameters {
         log.info("Get request {} with some body: {}",request, body);
-        return requestService.execute(request, body);
+        return requestService.execute(request, response, body);
     }
 
     @RequestMapping(value = "config/prefix", method = RequestMethod.POST)

@@ -17,6 +17,10 @@
     "headerMap" : {
       "testHeader" : ["value"]
     },
+    "cookies" : {
+      "name1" : "value1",
+      "name2": "value2"
+    },
     "script" : "test.groovy",
     "scriptParams" : ["attr:fa"],
     "template" : "test.twig"

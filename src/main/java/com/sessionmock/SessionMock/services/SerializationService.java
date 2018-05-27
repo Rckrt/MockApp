@@ -26,12 +26,6 @@ public class SerializationService {
   @Value("${application.static.resources.scenarios}")
   private String scenariosPath;
 
-  @Value("${application.static.resources.templates}")
-  private String templatePath;
-
-  @Value("${application.static.resources.scripts}")
-  private String scriptPath;
-
   private final List<RequestPattern> requestPatterns = new ArrayList<>();
 
   private final List<List<Set<RequestPattern>>> scenariosList = new ArrayList<>();;
@@ -46,8 +40,6 @@ public class SerializationService {
   private void init() throws IOException, RequestPatternNotFoundException {
     serializeAllRequestPatterns();
     serializeAllScenarios();
-    SCRIPT_PATH =  scriptPath;
-    TEMPLATE_PATH = templatePath;
   }
 
   public List<List<Set<RequestPattern>>> getScenariosList() {

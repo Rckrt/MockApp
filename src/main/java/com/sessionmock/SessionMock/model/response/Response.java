@@ -3,16 +3,20 @@ package com.sessionmock.SessionMock.model.response;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sessionmock.SessionMock.exceptions.InvalidScriptParameters;
+import com.sessionmock.SessionMock.model.patterns.CookiePattern;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -25,6 +29,7 @@ import java.util.List;
 public abstract class Response {
     private HttpStatus status;
     private HashMap<String, List<String>> headerMap;
+    private Map<String, String> cookies;
 
     public abstract String getBody(HttpServletRequest request, RequestPattern requestPattern) throws IOException, InvalidScriptParameters;
 }
