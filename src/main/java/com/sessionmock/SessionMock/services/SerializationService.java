@@ -3,6 +3,7 @@ package com.sessionmock.SessionMock.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sessionmock.SessionMock.exceptions.RequestPatternNotFoundException;
 import com.sessionmock.SessionMock.exceptions.SerializationException;
+import com.sessionmock.SessionMock.model.constants.Constants;
 import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import java.io.File;
 import java.io.IOException;
