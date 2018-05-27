@@ -11,9 +11,11 @@ public class Constants {
     public static final String WORD_WITH_SPACES_PATTERN = "^([\\w+\\s])*+$";
     public static final String REQUEST_SET_DELIMETER = "\\s+";
     public static final String CURRENT_PATH = getJarDir();
-    public static final String RESOURCE_PACKAGE = File.separator + "static resources";
-    public static String TEMPLATE_PATH = CURRENT_PATH + RESOURCE_PACKAGE + File.separator + "templates";
-    public static String SCRIPT_PATH = CURRENT_PATH + RESOURCE_PACKAGE + File.separator + "scripts";
+    public static final String RESOURCE_PACKAGE = CURRENT_PATH + File.separator + "static resources";
+    public static String TEMPLATE_PATH = RESOURCE_PACKAGE + File.separator + "templates";
+    public static String SCRIPT_PATH = RESOURCE_PACKAGE + File.separator + "scripts";
+    public static String PATTERNS_PATH = RESOURCE_PACKAGE + File.separator + "patterns";
+    public static String SCENARIOS_PATH = RESOURCE_PACKAGE + File.separator + "scenarios";
 
     private static String getJarDir() {
         String path = Constants.class.getProtectionDomain().getCodeSource().getLocation().getPath();

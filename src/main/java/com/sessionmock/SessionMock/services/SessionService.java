@@ -47,7 +47,7 @@ public class SessionService {
 
 
     private void validateWithScript(HttpServletRequest request, RequestPattern requestPattern, Map<Pattern,String> patternValueMap)
-            throws IOException, PatternValidationException, RequestPatternNotFoundException {
+            throws IOException, PatternValidationException, RequestPatternNotFoundException, PreviousRequestNotExist {
         Map<String, List<String>> patternListMap = new HashMap<>();
 
         for (Map.Entry<String, List<String>> entry :requestPattern.getValidateLinks().entrySet()) {
@@ -59,7 +59,8 @@ public class SessionService {
             throw new PatternValidationException(requestPattern, request);
     }
 
-    private List<String> patternLinksToValues(List<String> links, RequestPattern requestPattern, Map<Pattern,String> patternValueMap){
+    private List<String> patternLinksToValues(List<String> links, RequestPattern requestPattern, Map<Pattern,String> patternValueMap)
+            throws PreviousRequestNotExist {
         List<String> patternValues = new ArrayList<>();
         Map<String, String> linkValueMap = findInSessionByIdentifier(patternValueMap, requestPattern)
             .entrySet().stream()
@@ -104,11 +105,13 @@ public class SessionService {
                 stream().allMatch(entry -> entry.entrySet().containsAll(map.entrySet()));
     }
 
-    private Map<Pattern, String> findInSessionByIdentifier(Map<Pattern,String> map ,RequestPattern requestPattern ){
+    private Map<Pattern, String> findInSessionByIdentifier(Map<Pattern,String> map, RequestPattern requestPattern )
+            throws PreviousRequestNotExist {
+        if (sessionAttributes.isEmpty()) throw new PreviousRequestNotExist(requestPattern);
         return sessionAttributes.get(requestPattern).stream()
                 .filter(entry -> entry.entrySet()
                 .containsAll(map.entrySet()))
-                .findFirst().get();
+                .findFirst().orElseThrow(() -> new PreviousRequestNotExist(requestPattern));
     }
 
     private void saveSessionAttributeIdentifier(RequestPattern requestPattern, Map<Pattern, String> currentIdentifierMap) {

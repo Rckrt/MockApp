@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class PatternValidationException extends Exception{
 
     public PatternValidationException(Pattern pattern, HttpServletRequest request){

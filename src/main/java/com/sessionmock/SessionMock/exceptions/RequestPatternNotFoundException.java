@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class RequestPatternNotFoundException extends Exception  {
 
     public RequestPatternNotFoundException(HttpServletRequest request) {

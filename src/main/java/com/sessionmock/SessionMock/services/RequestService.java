@@ -6,6 +6,7 @@ import com.sessionmock.SessionMock.model.patterns.RequestPattern;
 import com.sessionmock.SessionMock.model.response.Response;
 
 import java.io.IOException;
+import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +52,8 @@ public class RequestService {
     }
 
     private void setCookiesFromPattern(HttpServletResponse response, RequestPattern requestPattern){
-        requestPattern.getResponse().getCookies()
-                .forEach((key, value) -> response.addCookie(new Cookie(key, value)));
+        Map<String, String> cookies = requestPattern.getResponse().getCookies();
+        if (cookies != null) cookies.forEach((key, value) -> response.addCookie(new Cookie(key, value)));
     }
 }
 

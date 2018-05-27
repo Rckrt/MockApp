@@ -20,12 +20,6 @@ import static com.sessionmock.SessionMock.model.constants.Constants.*;
 @Slf4j
 public class SerializationService {
 
-  @Value("${application.static.resources.patterns}")
-  private String requestPatternsPath;
-
-  @Value("${application.static.resources.scenarios}")
-  private String scenariosPath;
-
   private final List<RequestPattern> requestPatterns = new ArrayList<>();
 
   private final List<List<Set<RequestPattern>>> scenariosList = new ArrayList<>();;
@@ -78,13 +72,13 @@ public class SerializationService {
   }
 
   private void serializeAllScenarios() throws IOException, RequestPatternNotFoundException {
-    for (File file : getAllFiles(scenariosPath)) {
+    for (File file : getAllFiles(SCENARIOS_PATH)) {
       List<Set<RequestPattern>> patternSetListFromFile = getPatternSetListFromFile(file);
       scenariosList.add(patternSetListFromFile);
     }
   }
   private void serializeAllRequestPatterns() throws SerializationException {
-    for (File file : getAllFiles(requestPatternsPath)) {
+    for (File file : getAllFiles(PATTERNS_PATH)) {
       RequestPattern requestPattern = serializeClass(file, RequestPattern.class);
       requestPattern.setNickname(file.getName());
       requestPatterns.add(requestPattern);
